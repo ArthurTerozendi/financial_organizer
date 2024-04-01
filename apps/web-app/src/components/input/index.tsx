@@ -4,7 +4,7 @@ export const Input = ({label, type, value, onChange}: InputProps) => {
   
   return (
     <div className="flex flex-col gap-1">
-      <label className="font-semibold text-sm text-white"> {label} </label>
+      <label className="font-regular text-xs text-white"> {label} </label>
       <input className="border rounded-md focus:outline-none focus:shadow-outline p-1 text-sm" type={type} value={value} onChange={onChange}  />
     </div>
   )
