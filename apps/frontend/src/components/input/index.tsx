@@ -1,6 +1,7 @@
+import { FC } from "react"
 import { InputProps } from "./type"
 
-export const Input = ({label, type, value, onChange}: InputProps) => {
+export const Input: FC<InputProps> = ({label, type, value, onChange}) => {
   
   return (
     <div className="flex flex-col gap-1">
