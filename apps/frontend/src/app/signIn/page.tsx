@@ -32,9 +32,9 @@ const SignIn = () => {
           <h3 className="text-lg text-white font-bold"> Cadastrar </h3>
           <div className="flex gap-5 flex-col">
             <Input label="Usuário" type="text" value={user} onChange={handleUserChange} />
-            <Input label="Email" type="email" value={password} onChange={handlePasswordChange} />
-            <Input label="Senha" type="password" value={user} onChange={handleUserChange} />
-            <Input label="Confirmar Senha" type="password" value={password} onChange={handlePasswordChange} />
+            <Input label="Email" type="email" value={email} onChange={handleEmailChange} />
+            <Input label="Senha" type="password" value={password} onChange={handlePasswordChange} />
+            <Input label="Confirmar Senha" type="password" value={confirmPassword} onChange={handleConfirmPasswordChange} />
           </div>
         </div>
         <div className="flex flex-col gap-1">
