@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { Prisma as P, PrismaClient } from "@prisma/client";
 
 declare global {
   var _prismaClient_: PrismaClient;
@@ -11,6 +11,8 @@ function getPrismaClient() {
 
   return global._prismaClient_;
 }
+
+export const Prisma = P;
 
 export class Db {
   private static self: Db;
