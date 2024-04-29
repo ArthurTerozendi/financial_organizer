@@ -24,7 +24,7 @@ export default async function(fastify: FastifyInstance) {
       const { name, password, email } = request.body as SignInBody;
       const passwordEncrypted = await bcrypt.hash(password, 10);
   
-      const newUser = await Db.instance.user.create({
+      await Db.instance.user.create({
         data: {
           email,
           name,
