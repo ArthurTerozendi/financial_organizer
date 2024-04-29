@@ -1,35 +1,49 @@
 'use client'
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useCallback, useState } from "react";
 import { Input } from "../../components/input";
 import Link from "next/link";
+import axios from "axios";
+
+type LoginForm = {
+  email: string;
+  password: string;
+}
 
 const Login = () => {
-  const [user, setUser] = useState<string>();
+  const [form, setForm] = useState<LoginForm>({ email: '', password: '' });
   const [password, setPassword] = useState<string>();
 
-  const handleUserChange = (value: ChangeEvent<HTMLInputElement>) => {
-    setUser(value.target.value)
-  }
+  const handleFieldChange = useCallback((value: string, field: keyof LoginForm) => {
+    setForm((oldValue) => ({ ...oldValue, [field]: value }));
+  }, [setForm])
 
-  const handlePasswordChange = (value: ChangeEvent<HTMLInputElement>) => {
-    setPassword(value.target.value)
-  }
+  const handleFormSubmit = useCallback((e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    axios.post('http://localhost:8080/api/login/', {
+      email: form.email,
+      password: form.password,
+    }).then((result) => {
+      console.log(result);
+      localStorage.setItem('jwtToken', result.data.token)
+    }).catch((error) => console.error(error))
+  }, [form]);
 
   return (
     <div className="flex w-full h-full items-center justify-center">
-      <div className="flex flex-col w-80 align-center gap-14 bg-dark-gray p-8 rounded">
+      <form className="flex flex-col w-80 align-center gap-14 bg-dark-gray p-8 rounded" onSubmit={handleFormSubmit}>
         <div className="flex flex-col gap-10 text-black">
           <h3 className="text-lg text-white font-bold"> Entrar </h3>
           <div className="flex gap-5 flex-col">
-            <Input label="Usuário" type="text" value={user} onChange={handleUserChange} />
-            <Input label="Senha" type="password" value={password} onChange={handlePasswordChange} />
+            <Input label="Email" type="text" value={form.email} onChange={(e) => handleFieldChange(e.target.value, 'email')} />
+            <Input label="Senha" type="password" value={form.password} onChange={(e) => handleFieldChange(e.target.value, 'password')} />
           </div>
         </div>
         <div className="flex flex-col gap-1">
-          <button className="bg-violet-700 py-2 text-white rounded font-semibold text-sm"> Entrar </button>
+          <input type="submit" value="Entrar" className="bg-violet-700 py-2 text-white rounded font-semibold text-sm" />
           <Link href="/signIn" className="text-xs text-right text-slate-400 cursor-pointer hover:underline"> Cadastre-se aqui </Link>
         </div>
-      </div>
+      </form>
     </div>
   );
 }
