@@ -5,6 +5,9 @@ import autoLoad from '@fastify/autoload';
 import { dirname, join } from 'path';
 import fastifySwagger from '@fastify/swagger';
 import fastifySwaggerUi from '@fastify/swagger-ui';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
@@ -55,10 +58,10 @@ fastify.register(autoLoad, {
 await fastify.ready();
 fastify.swagger();
 
-fastify.listen({port: 3000}, (err, address) => {
+fastify.listen({ port: Number(process.env.PORT) }, (err, address) => {
   if(err) {
     fastify.log.error(err);
     process.exit(1);
   }
-  fastify.log.info({port: 8080}, `Server is now listening on ${address}`);
+  fastify.log.info({port: process.env.PORT}, `Server is now listening on ${address}`);
 });
