@@ -60,5 +60,5 @@ fastify.listen({port: 3000}, (err, address) => {
     fastify.log.error(err);
     process.exit(1);
   }
-  fastify.log.info({port: 3000}, `Server is now listening on ${address}`);
+  fastify.log.info({port: 8080}, `Server is now listening on ${address}`);
 });
