@@ -1,14 +1,14 @@
 import { FastifyInstance } from "fastify";
 import bcrypt from 'bcrypt';
-import { Db, Prisma } from "../../../../../packages/db";
+import { Db, Prisma } from "@financial-organizer/db";
 
-type SignInBody = {
+type SignUpBody = {
   name: string,
   password: string,
   email: string,
 }
 
-const SignInSchema = {
+const SignUpSchema = {
   name: { type: 'string' },
   password: { type: 'string' },
   email: { type: 'string' }
@@ -17,11 +17,11 @@ const SignInSchema = {
 export default async function(fastify: FastifyInstance) {
   fastify.post('/', {
     schema: {
-      body: SignInSchema,
+      body: SignUpSchema,
     }
   }, async (request, reply) => {
     try {
-      const { name, password, email } = request.body as SignInBody;
+      const { name, password, email } = request.body as SignUpBody;
       const passwordEncrypted = await bcrypt.hash(password, 10);
   
       await Db.instance.user.create({

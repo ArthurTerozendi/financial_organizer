@@ -11,7 +11,6 @@ type LoginForm = {
 
 const Login = () => {
   const [form, setForm] = useState<LoginForm>({ email: '', password: '' });
-  const [password, setPassword] = useState<string>();
 
   const handleFieldChange = useCallback((value: string, field: keyof LoginForm) => {
     setForm((oldValue) => ({ ...oldValue, [field]: value }));
@@ -41,7 +40,7 @@ const Login = () => {
         </div>
         <div className="flex flex-col gap-1">
           <input type="submit" value="Entrar" className="bg-violet-700 py-2 text-white rounded font-semibold text-sm" />
-          <Link href="/signIn" className="text-xs text-right text-slate-400 cursor-pointer hover:underline"> Cadastre-se aqui </Link>
+          <Link href="/signUp" className="text-xs text-right text-slate-400 cursor-pointer hover:underline"> Cadastre-se aqui </Link>
         </div>
       </form>
     </div>

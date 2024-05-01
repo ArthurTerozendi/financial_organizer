@@ -3,19 +3,19 @@
 import { Input } from "@/components/input";
 import axios from "axios";
 import Link from "next/link";
-import { ChangeEvent, FormEvent, useCallback, useState } from "react";
+import { FormEvent, useCallback, useState } from "react";
 
-type SignInForm = {
+type SignUpForm = {
   email: string;
   name: string;
   password: string;
   confirmPassword: string;
 }
 
-const SignIn = () => {
-  const [form, setForm] = useState<SignInForm>({ email: '', password: '', name: '', confirmPassword: '' });
+const signUp = () => {
+  const [form, setForm] = useState<SignUpForm>({ email: '', password: '', name: '', confirmPassword: '' });
   
-  const handleFormChange = useCallback((value: string, field: keyof SignInForm) => {
+  const handleFormChange = useCallback((value: string, field: keyof SignUpForm) => {
     setForm((oldValue) => ({ ...oldValue, [field]: value }));
   }, [setForm])
 
@@ -27,7 +27,7 @@ const SignIn = () => {
       return;
     }
   
-    axios.post(`http://localhost:8080/api/signIn/`, {
+    axios.post(`http://localhost:8080/api/signUp/`, {
       email: form.email,
       name: form.name,
       password: form.password,
@@ -63,4 +63,4 @@ const SignIn = () => {
   );
 }
 
-export default SignIn;
+export default signUp;
