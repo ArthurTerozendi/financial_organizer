@@ -21,6 +21,7 @@ fastify.register(cors);
 await fastify.register(fastifySwagger, {
   openapi: {
     openapi: '3.0.0',
+    
     info: {
       title: 'Financial Organizer - Swagger',
       description: 'Swagger documentation for Financial Organizer',

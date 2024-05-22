@@ -1,5 +1,5 @@
 import { FastifyInstance } from "fastify";
-import bcrypt from 'bcrypt';
+import bcrypt from "bcrypt";
 import { Db, Prisma } from "@financial-organizer/db";
 
 type SignUpBody = {
@@ -9,12 +9,12 @@ type SignUpBody = {
 }
 
 const SignUpSchema = {
-  name: { type: 'string' },
-  password: { type: 'string' },
-  email: { type: 'string' }
+  name: { type: "string" },
+  password: { type: "string" },
+  email: { type: "string" }
 }
 
-export default async function(fastify: FastifyInstance) {
+export default async function (fastify: FastifyInstance) {
   fastify.post('/', {
     schema: {
       body: SignUpSchema,
@@ -23,7 +23,7 @@ export default async function(fastify: FastifyInstance) {
     try {
       const { name, password, email } = request.body as SignUpBody;
       const passwordEncrypted = await bcrypt.hash(password, 10);
-  
+
       await Db.instance.user.create({
         data: {
           email,

@@ -1,37 +1,17 @@
 module.exports = {
-	"root": true,
-	"env": {
-		"browser": true,
-		"es2021": true
-	},
-	"extends": [
+  root: true,
+  parser: '@typescript-eslint/parser',
+  extends: [
     'airbnb-typescript/base',
-		"eslint:recommended",
-		"plugin:@typescript-eslint/recommended",
-		'plugin:prettier/recommended'
-	],
-	"overrides": [
-		{
-			"env": {
-				"node": true
-			},
-			"files": [
-				".eslintrc.{js,cjs}"
-			],
-			"parserOptions": {
-				"sourceType": "script"
-			}
-		}
-	],
-	"parser": "@typescript-eslint/parser",
-	"parserOptions": {
-		"ecmaVersion": "latest",
-		"sourceType": "module"
-	},
-	"plugins": [
-		"@typescript-eslint"
-	],
-	"rules": {
+    'plugin:import/recommended',
+    'plugin:prettier/recommended',
+    'plugin:jest-formatting/recommended',
+  ],
+  plugins: [
+    "@typescript-eslint",
+    "prettier"
+  ],
+  rules: {
     'no-console': ['error'],
     'no-debugger': ['error'],
     '@typescript-eslint/no-non-null-assertion': 'error',
@@ -67,5 +47,16 @@ module.exports = {
     '@typescript-eslint/consistent-type-imports': 'error',
     'import/no-unassigned-import': ['error', { allow: ['reflect-metadata', 'isomorphic-unfetch'] }],
     'import/no-unused-modules': [1, { unusedExports: true }],
+  },
+  settings: {
+    'import/parsers': {
+      '@typescript-eslint/parser': ['.ts', '.tsx'],
+    },
+    'import/resolver': {
+      typescript: {
+        alwaysTryTypes: true,
+        project: './',
+      },
+    },
   },
 }
