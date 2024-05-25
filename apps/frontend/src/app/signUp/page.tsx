@@ -56,7 +56,7 @@ const signUp = () => {
           </div>
         </div>
         <div className="flex flex-col gap-1">
-          <input type="submit"  className="bg-violet-700 py-2 text-white rounded font-semibold text-sm" value="Cadastrar" />
+          <input type="submit"  className="bg-purple py-2 text-white rounded font-semibold text-sm" value="Cadastrar" />
         </div>
       </form>
     </div>
