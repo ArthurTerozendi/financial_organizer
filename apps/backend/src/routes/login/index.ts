@@ -2,21 +2,17 @@ import { Db } from "@financial-organizer/db";
 import { FastifyInstance } from "fastify";
 import bcrypt from 'bcrypt';
 import jsonwebtoken from "jsonwebtoken";
+import { $ref } from "./schema";
 
 type LoginBody = {
   password: string,
   email: string,
 }
 
-const LoginSchema = {
-  password: { type: 'string' },
-  email: { type: 'string' }
-}
-
 export default async function(fastify: FastifyInstance) {
   fastify.post('/', {
     schema: {
-      body: LoginSchema,
+      body: $ref('LoginSchema'),
     }
   }, async (request, reply) => {
     const { password, email } = request.body as LoginBody;

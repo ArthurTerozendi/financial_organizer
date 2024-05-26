@@ -6,6 +6,8 @@ import { dirname, join } from 'path';
 import fastifySwagger from '@fastify/swagger';
 import fastifySwaggerUi from '@fastify/swagger-ui';
 import dotenv from 'dotenv';
+import { LoginSchemas } from './routes/login/schema';
+import { SignUpSchemas } from './routes/signUp/schema';
 
 dotenv.config();
 
@@ -54,6 +56,10 @@ fastify.register(autoLoad, {
   dir: join(__dirname, 'routes'),
   options: { prefix: '/api' }
 });
+
+for (const schema of [...LoginSchemas, ...SignUpSchemas]) {
+  fastify.addSchema(schema);
+}
 
 
 await fastify.ready();

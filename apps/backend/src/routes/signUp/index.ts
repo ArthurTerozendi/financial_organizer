@@ -1,6 +1,7 @@
 import { FastifyInstance } from "fastify";
 import bcrypt from "bcrypt";
 import { Db, Prisma } from "@financial-organizer/db";
+import { $ref } from "./schema";
 
 type SignUpBody = {
   name: string,
@@ -8,16 +9,10 @@ type SignUpBody = {
   email: string,
 }
 
-const SignUpSchema = {
-  name: { type: "string" },
-  password: { type: "string" },
-  email: { type: "string" }
-}
-
 export default async function (fastify: FastifyInstance) {
   fastify.post('/', {
     schema: {
-      body: SignUpSchema,
+      body: $ref('SignUpSchema'),
     }
   }, async (request, reply) => {
     try {
