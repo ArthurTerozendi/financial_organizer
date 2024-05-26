@@ -8,7 +8,7 @@ export default function DashboardLayout({
   return (
     <section className="flex flex-row w-full h-full gap-8">
       <Sidebar/>
-			<section className="flex flex-col">
+			<section className="flex flex-col w-full">
         <div className="w-full pt-8 text-4xl font-semibold"> Title </div>
         <div className="w-full h-full">
       	  {children}
