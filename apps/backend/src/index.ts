@@ -1,4 +1,6 @@
-import Fastify from 'fastify';
+import Fastify, { FastifyReply, FastifyRequest } from 'fastify';
+import fjwt, { FastifyJWT } from '@fastify/jwt';
+import fCookie from '@fastify/cookie';
 import cors from '@fastify/cors';
 import { fileURLToPath } from 'url';
 import autoLoad from '@fastify/autoload';
@@ -60,6 +62,29 @@ fastify.register(autoLoad, {
 for (const schema of [...LoginSchemas, ...SignUpSchemas]) {
   fastify.addSchema(schema);
 }
+
+
+fastify.register(fjwt, { secret: 'SECRET_NEED_TO_BE_CHANGED' })
+
+fastify.addHook('preHandler', (req, _res, next) => {
+  req.jwt = fastify.jwt;
+  return next();
+})
+
+fastify.register(fCookie, {
+  secret: 'some-secret-key',
+  hook: 'preHandler',
+});
+
+fastify.decorate('authenticate', async (req: FastifyRequest, reply: FastifyReply) => {
+  const token = req.cookies.access_token;
+  if (!token) {
+    return reply.status(401).send({ message: 'Authentication required' });
+  }
+
+  const decoded = req.jwt.verify<FastifyJWT['user']>(token);
+  req.user = decoded;
+});
 
 
 await fastify.ready();
