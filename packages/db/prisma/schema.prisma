@@ -19,12 +19,22 @@ model User {
   createdAt DateTime @default(now())
 
   tags Tag[]
+  bankStatements BankStatement[]
 }
 
 model Tag {
   id String @id @default(nanoid())
   name String
   color String
+  createdAt DateTime @default(now())
+  userId String
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+model BankStatement {
+  id String @id @default(nanoid())
+  name String
   createdAt DateTime @default(now())
   userId String
 
