@@ -1,8 +1,9 @@
 'use client'
-import { ChangeEvent, FormEvent, useCallback, useState } from "react";
+import { FormEvent, useCallback, useState } from "react";
 import { Input } from "../../components/input";
 import Link from "next/link";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 
 type LoginForm = {
   email: string;
@@ -11,6 +12,8 @@ type LoginForm = {
 
 const Login = () => {
   const [form, setForm] = useState<LoginForm>({ email: '', password: '' });
+
+  const router = useRouter();
 
   const handleFieldChange = useCallback((value: string, field: keyof LoginForm) => {
     setForm((oldValue) => ({ ...oldValue, [field]: value }));
@@ -25,8 +28,10 @@ const Login = () => {
     }).then((result) => {
       console.log(result);
       localStorage.setItem('jwtToken', result.data.token)
+
+      router.push('/dashboard');
     }).catch((error) => console.error(error))
-  }, [form]);
+  }, [form, router]);
 
   return (
     <div className="flex w-full h-full items-center justify-center">
