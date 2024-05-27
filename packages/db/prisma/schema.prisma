@@ -17,4 +17,16 @@ model User {
   name String
   password String
   createdAt DateTime @default(now())
+
+  tags Tag[]
+}
+
+model Tag {
+  id String @id @default(nanoid())
+  name String
+  color String
+  createdAt DateTime @default(now())
+  userId String
+
+  user User @relation(fields: [userId], references: [id])
 }
