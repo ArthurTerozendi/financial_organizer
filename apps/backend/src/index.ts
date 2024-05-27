@@ -10,6 +10,7 @@ import fastifySwaggerUi from '@fastify/swagger-ui';
 import dotenv from 'dotenv';
 import { LoginSchemas } from './routes/login/schema';
 import { SignUpSchemas } from './routes/signUp/schema';
+import { TransactionSchemas } from './routes/transaction/schema';
 
 dotenv.config();
 
@@ -59,7 +60,7 @@ fastify.register(autoLoad, {
   options: { prefix: '/api' }
 });
 
-for (const schema of [...LoginSchemas, ...SignUpSchemas]) {
+for (const schema of [...LoginSchemas, ...SignUpSchemas, ...TransactionSchemas]) {
   fastify.addSchema(schema);
 }
 

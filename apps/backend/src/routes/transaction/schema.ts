@@ -13,4 +13,4 @@ export type CreateTransactionBody = z.infer<typeof CreateTrasactionSchema>
 
 export const { schemas: TransactionSchemas, $ref } = buildJsonSchemas({
   CreateTrasactionSchema
-})
+}, { $id: 'TransactionSchema' })

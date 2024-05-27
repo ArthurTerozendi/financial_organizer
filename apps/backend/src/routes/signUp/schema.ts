@@ -7,8 +7,8 @@ export const SignUpSchema = z.object({
   password: z.string({ required_error: 'Password is required', invalid_type_error: 'Password most to be a string' }),
 });
 
-export type SingUpBody = z.infer<typeof SignUpSchema>
+export type SingUpBody = z.infer<typeof SignUpSchema>;
 
 export const { schemas: SignUpSchemas, $ref } = buildJsonSchemas({
   SignUpSchema
-})
+}, { $id: 'SignUpSchema' });
