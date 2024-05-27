@@ -20,6 +20,7 @@ model User {
 
   tags Tag[]
   bankStatements BankStatement[]
+  transactions Transaction[]
 }
 
 model Tag {
@@ -30,6 +31,8 @@ model Tag {
   userId String
 
   user User @relation(fields: [userId], references: [id])
+  
+  transactions Transaction[]
 }
 
 model BankStatement {
@@ -39,4 +42,28 @@ model BankStatement {
   userId String
 
   user User @relation(fields: [userId], references: [id])
+
+  transactions Transaction[]
+}
+
+enum TransactionType {
+  Credit
+  Debit
+}
+
+model Transaction {`
+  id String @id @default(nanoid())
+  description String
+  value Float @default(0)
+  type TransactionType
+  transactionDate DateTime
+  fitId String?
+  createdAt DateTime @default(now())
+  userId String
+  tagId String?
+  bankStatementId String?
+
+  user User @relation(fields: [userId], references: [id])
+  tag Tag? @relation(fields: [tagId], references: [id])
+  bankStatement BankStatement? @relation(fields: [bankStatementId], references: [id])
 }
