@@ -1,6 +1,5 @@
 import Fastify, { FastifyReply, FastifyRequest } from 'fastify';
 import fjwt, { FastifyJWT } from '@fastify/jwt';
-import fCookie from '@fastify/cookie';
 import cors from '@fastify/cors';
 import { fileURLToPath } from 'url';
 import autoLoad from '@fastify/autoload';
@@ -72,18 +71,16 @@ fastify.addHook('preHandler', (req, _res, next) => {
   return next();
 })
 
-fastify.register(fCookie, {
-  secret: 'some-secret-key',
-  hook: 'preHandler',
-});
 
 fastify.decorate('authenticate', async (req: FastifyRequest, reply: FastifyReply) => {
-  const token = req.cookies.access_token;
+  const token = req.headers.authorization?.split('Bearer ')[1];
+
   if (!token) {
     return reply.status(401).send({ message: 'Authentication required' });
   }
 
   const decoded = req.jwt.verify<FastifyJWT['user']>(token);
+
   req.user = decoded;
 });
 

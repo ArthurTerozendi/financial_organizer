@@ -2,7 +2,6 @@ import { FastifyReply, FastifyRequest } from "fastify";
 import { LoginBody } from "./schema";
 import { Db } from "@financial-organizer/db";
 import bcrypt from 'bcrypt';
-import jsonwebtoken from "jsonwebtoken";
 
 export async function login(req: FastifyRequest<{ Body: LoginBody }>, reply: FastifyReply) {
   const { password, email } = req.body;
@@ -23,11 +22,13 @@ export async function login(req: FastifyRequest<{ Body: LoginBody }>, reply: Fas
       return reply.status(404).send({ message: 'Wrong password', status: 'BAD_REQUEST' });
     }
 
-    const token = jsonwebtoken.sign(
-      { user: JSON.stringify(user) },
-      'private_key',
-      { expiresIn: '7d' }
-    )
+    const payload = {
+      id: user.id,
+      email: user.email,
+      name: user.name,
+    }
+
+    const token = req.jwt.sign(payload, { expiresIn: '7d' });
 
     reply.status(200).send({ token });
 }
