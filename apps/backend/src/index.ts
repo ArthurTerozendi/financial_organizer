@@ -79,9 +79,18 @@ fastify.decorate('authenticate', async (req: FastifyRequest, reply: FastifyReply
     return reply.status(401).send({ message: 'Authentication required' });
   }
 
-  const decoded = req.jwt.verify<FastifyJWT['user']>(token);
+  try {
+    const decoded = req.jwt.verify<FastifyJWT['user']>(token);
+    req.user = decoded;
+  }
+  catch (e: any) {
+    if (e.code === 'FAST_JWT_EXPIRED') {
+      return reply.status(401).send({ message: 'Token expired',  })
+    }
+    return reply.status(500).send({ message: 'Unknown error' })
+  }
 
-  req.user = decoded;
+
 });
 
 
