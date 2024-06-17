@@ -1,5 +1,5 @@
 'use client'
-import { FormEvent, useCallback, useState } from "react";
+import { FormEvent, useCallback, useEffect, useState } from "react";
 import { Input } from "../../components/input";
 import Link from "next/link";
 import axios from "axios";
@@ -32,6 +32,12 @@ const Login = () => {
       router.push('/dashboard');
     }).catch((error) => console.error(error))
   }, [form, router]);
+
+  useEffect(() => {
+    const token = localStorage.getItem('jwtToken');
+
+    if (token) router.push('/dashboard');
+  }, [])
 
   return (
     <div className="flex w-full h-full items-center justify-center">
