@@ -17,7 +17,6 @@ export function useApi(router: AppRouterInstance) {
       options: {
         method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
         body?: T1;
-        abortSignal?: AbortSignal;
       },
     ): Promise<ApiResponse<T2>> => {
       const token = localStorage.getItem('jwtToken');
@@ -51,7 +50,6 @@ export function useApi(router: AppRouterInstance) {
     <T1 extends { [key: string]: string | number }, T2>(
       url: string,
       params?: T1,
-      abortSignal?: AbortSignal,
     ): Promise<ApiResponse<T2>> => {
       let newURL = url;
 
@@ -63,32 +61,32 @@ export function useApi(router: AppRouterInstance) {
         newURL = `${url}?${searchParams.join('&')}`;
       }
 
-      return makeRequest<{}, T2>(newURL, { method: 'GET', abortSignal });
+      return makeRequest<{}, T2>(newURL, { method: 'GET' });
     },
     [makeRequest],
   );
 
   const putRequest = useCallback(
-    <T1, T2>(url: string, body?: T1, abortSignal?: AbortSignal): Promise<ApiResponse<T2>> =>
-      makeRequest<T1, T2>(url, { method: 'PUT', body, abortSignal }),
+    <T1, T2>(url: string, body?: T1): Promise<ApiResponse<T2>> =>
+      makeRequest<T1, T2>(url, { method: 'PUT', body }),
     [makeRequest],
   );
 
   const postRequest = useCallback(
-    <T1, T2>(url: string, body?: T1, abortSignal?: AbortSignal): Promise<ApiResponse<T2>> =>
-      makeRequest<T1, T2>(url, { method: 'POST', body, abortSignal }),
+    <T1, T2>(url: string, body?: T1): Promise<ApiResponse<T2>> =>
+      makeRequest<T1, T2>(url, { method: 'POST', body, }),
     [makeRequest],
   );
 
   const patchRequest = useCallback(
-    <T1, T2>(url: string, body?: T1, abortSignal?: AbortSignal): Promise<ApiResponse<T2>> =>
-      makeRequest<T1, T2>(url, { method: 'PATCH', body, abortSignal }),
+    <T1, T2>(url: string, body?: T1): Promise<ApiResponse<T2>> =>
+      makeRequest<T1, T2>(url, { method: 'PATCH', body }),
     [makeRequest],
   );
 
   const deleteRequest = useCallback(
-    <T1, T2>(url: string, body?: T1, abortSignal?: AbortSignal): Promise<ApiResponse<T2>> =>
-      makeRequest<T1, T2>(url, { method: 'DELETE', body, abortSignal }),
+    <T1, T2>(url: string, body?: T1): Promise<ApiResponse<T2>> =>
+      makeRequest<T1, T2>(url, { method: 'DELETE', body }),
     [makeRequest],
   );
 

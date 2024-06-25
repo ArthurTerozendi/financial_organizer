@@ -1,5 +1,9 @@
 export const ApiRoutes = {
   login: '/login',
   signUp: '/signUp',
-  transaction: '/transaction',
+  transaction: {
+    create: '/transaction',
+    uploadFile: '/transaction/uploadFile'
+  },
+
 }
