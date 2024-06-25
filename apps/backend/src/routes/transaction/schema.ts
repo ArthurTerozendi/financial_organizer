@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { buildJsonSchemas } from 'fastify-zod'
 
-const CreateTrasactionSchema = z.object({
+const CreateTransactionSchema = z.object({
   description: z.string(),
   tag: z.string(),
   value: z.number(),
@@ -9,8 +9,8 @@ const CreateTrasactionSchema = z.object({
   type: z.string(),
 });
 
-export type CreateTransactionBody = z.infer<typeof CreateTrasactionSchema>
+export type CreateTransactionBody = z.infer<typeof CreateTransactionSchema>
 
 export const { schemas: TransactionSchemas, $ref } = buildJsonSchemas({
-  CreateTrasactionSchema
+  CreateTransactionSchema,
 }, { $id: 'TransactionSchema' })

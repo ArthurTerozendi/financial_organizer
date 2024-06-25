@@ -10,6 +10,7 @@ import dotenv from 'dotenv';
 import { LoginSchemas } from './routes/login/schema';
 import { SignUpSchemas } from './routes/signUp/schema';
 import { TransactionSchemas } from './routes/transaction/schema';
+import multipart from '@fastify/multipart';
 
 dotenv.config();
 
@@ -19,6 +20,8 @@ const __dirname = dirname(__filename)
 const fastify = Fastify({
   logger: true
 });
+
+fastify.register(multipart);
 
 fastify.register(cors);
   
@@ -92,7 +95,6 @@ fastify.decorate('authenticate', async (req: FastifyRequest, reply: FastifyReply
 
 
 });
-
 
 await fastify.ready();
 fastify.swagger();
