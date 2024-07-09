@@ -5,7 +5,7 @@ const CreateTransactionSchema = z.object({
   description: z.string(),
   tag: z.string(),
   value: z.number(),
-  data: z.date(),
+  date: z.string(),
   type: z.string(),
 });
 

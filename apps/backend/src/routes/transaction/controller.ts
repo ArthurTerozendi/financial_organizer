@@ -3,10 +3,41 @@ import { CreateTransactionBody } from "./schema";
 import { Ofx } from "ofx-data-extractor";
 import { Db } from "@financial-organizer/db";
 import { parseDate } from "../../utils";
+import { DateTime } from "luxon";
 
 export async function createTransaction(request: FastifyRequest<{ Body: CreateTransactionBody }>, reply: FastifyReply) {
-  console.log(request.body);
-  reply.status(200).send('ok');
+  const { date, description, tag, type, value } = request.body;
+
+  const dateFormatted = DateTime.fromISO(date).toUTC();
+
+  if (!dateFormatted.isValid) return reply.status(400).send({ message: 'Date invalid' }); 
+
+  let dbTag = await Db.instance.tag.findFirst({ where: {
+    name: tag,
+  } })
+  
+  if (!dbTag) {
+    dbTag = await Db.instance.tag.create({
+      data: {
+        name: tag,
+        color: '#ef23ab',
+        userId: request.user.id,
+      }
+    })
+  }
+
+  const newTransaction = await Db.instance.transaction.create({
+    data: {
+      description,
+      type: type as 'Credit' | 'Debit',
+      value,
+      tagId: dbTag.id,
+      transactionDate: dateFormatted.toISO(),
+      userId: request.user.id,
+    }
+  });
+
+  reply.status(200).send({ transaction: newTransaction });
 }
 
 export async function uploadFile(request: FastifyRequest, reply: FastifyReply) {
@@ -30,7 +61,7 @@ export async function uploadFile(request: FastifyRequest, reply: FastifyReply) {
 
       return {
         description: transaction.MEMO,
-        value: transactionValue,
+        value: Math.abs(transactionValue),
         type: (transactionValue > 0 ? 'Credit' : 'Debit') as 'Credit' | 'Debit',
         transactionDate: parseDate(transaction.DTPOSTED as any) ?? '',
         fitId: transaction.FITID.toString(),
