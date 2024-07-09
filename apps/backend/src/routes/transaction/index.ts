@@ -1,6 +1,7 @@
 import { FastifyInstance } from "fastify";
 import { $ref } from "./schema";
-import { createTransaction, uploadFile } from "./controller";
+import createTransaction from "./controller/createTransaction";
+import uploadFile from "./controller/uploadFile";
 
 export default async function(fastify: FastifyInstance) {
   fastify.post('/', {
