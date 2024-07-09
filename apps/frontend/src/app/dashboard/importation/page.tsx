@@ -4,7 +4,7 @@ import { Input } from "@/components/input";
 import { useApi } from "@/services/api";
 import { ApiRoutes } from "@/services/routes";
 import { useRouter } from "next/navigation";
-import { ChangeEvent, FormEvent, useCallback, useState } from "react";
+import { ChangeEvent, useCallback, useState } from "react";
 import { TransactionForm } from "./types";
 
 const Importation = () => {

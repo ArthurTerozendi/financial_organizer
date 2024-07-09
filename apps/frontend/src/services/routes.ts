@@ -3,7 +3,8 @@ export const ApiRoutes = {
   signUp: '/signUp',
   transaction: {
     create: '/transaction',
-    uploadFile: '/transaction/uploadFile'
+    uploadFile: '/transaction/uploadFile',
+    allTransactions: '/transaction/all',
   },
 
 }
