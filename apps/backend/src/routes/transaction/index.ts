@@ -1,7 +1,6 @@
 import { FastifyInstance } from "fastify";
 import { $ref } from "./schema";
-import createTransaction from "./controller/createTransaction";
-import uploadFile from "./controller/uploadFile";
+import { createTransaction, getAllTransactions, uploadFile } from "./controller";
 
 export default async function(fastify: FastifyInstance) {
   fastify.post('/', {
@@ -14,4 +13,8 @@ export default async function(fastify: FastifyInstance) {
   fastify.post('/uploadFile', {
     preHandler: [fastify.authenticate],
   }, uploadFile);
+
+  fastify.get('/all', {
+    preHandler: [fastify.authenticate],
+  }, getAllTransactions);
 }
