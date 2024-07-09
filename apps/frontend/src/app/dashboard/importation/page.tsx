@@ -46,8 +46,16 @@ const Importation = () => {
       <div className="flex gap-8 flex-col mt-8 w-2/6 h-full">
         <Input label="Descrição" value="" onChange={() => {}} type="text" />
         <Input label="Categoria" value="" onChange={() => {}} type="text" />
-        <Input label="Valor" value="" onChange={() => {}} type="text" />
-        <Input label="Data" value="" onChange={() => {}} type="date" />
+        <div className="flex flex-row gap-3 items-center">
+          <div className="w-1/2">
+            <Input label="Valor" value="" onChange={() => {}} type="text" />
+          </div>
+          <div className="w-1/2 flex flex-row gap-2 mt-4">
+            <Input label="Crédito" onChange={() => {}} type="radio" name="type" value="" />
+            <Input label="Débito" onChange={() => {}} type="radio" name="type" value="" />
+          </div>
+        </div>
+        <Input label="Data" value="" onChange={() => {}} type="datetime-local" />
         <div className="flex justify-end items-start">
           <button className="bg-purple py-1 px-4 text-white rounded font-semibold text-sm" onClick={handleFormSubmit} > Criar </button>
         </div>
