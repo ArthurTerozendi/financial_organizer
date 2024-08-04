@@ -11,7 +11,8 @@
     "dev:db": "docker-compose up -d",
     "migrate:dev": "pnpm -F @financial-organizer/db prisma migrate dev",
     "prettier:write": "prettier ./apps --write",
-    "prettier:check": "prettier ./apps --check"
+    "prettier:check": "prettier ./apps --check",
+    "build:packages": "pnpm -r -F \"./packages/**\" run build"
   },
   "keywords": [],
   "author": "",

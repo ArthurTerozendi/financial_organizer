@@ -2,10 +2,11 @@
   "name": "@financial-organizer/db",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "index.ts",
   "scripts": {
     "prisma": "prisma",
-    "prepare": "prisma generate" 
+    "prepare": "prisma generate",
+    "build": "tsc"
   },
   "keywords": [],
   "author": "",
