@@ -10,8 +10,12 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@emotion/react": "^11.13.0",
+    "@emotion/styled": "^11.13.0",
     "@financial-organizer/db": "workspace:^",
     "@mui/material": "^5.16.0",
+    "@mui/styled-engine": "^5.16.6",
+    "@mui/x-charts": "^7.13.0",
     "axios": "^1.6.8",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
