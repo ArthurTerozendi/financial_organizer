@@ -7,6 +7,8 @@ import Login from './pages/login/index.tsx'
 import SignUp from './pages/signUp/index.tsx'
 import Transactions from './pages/transactions/index.tsx'
 import Importation from './pages/importation/index.tsx'
+import { createTheme } from '@mui/material/styles'
+import { ThemeProvider } from '@emotion/react'
 
 const router = createBrowserRouter([
   {
@@ -30,10 +32,18 @@ const router = createBrowserRouter([
     path: "/signUp",
     element: <SignUp />
    }
-])
+]);
+
+const darkTheme = createTheme({
+  palette: {
+    mode: 'dark',
+  },
+});
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <ThemeProvider theme={darkTheme}>
+      <RouterProvider router={router} />
+    </ThemeProvider>
   </React.StrictMode>,
 )
