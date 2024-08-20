@@ -13,7 +13,7 @@ import DashboardLayout from "../../layouts/dashboard";
 import { PageEnum, Pages } from "../../components/sidebar/types";
 
 const Transactions: FC = () => {
- const navigate = useNavigate();
+  const navigate = useNavigate();
   const { getRequest } = useApi(navigate);
 
   const [transactions, setTransactions] = useState<Transaction[]>([])
