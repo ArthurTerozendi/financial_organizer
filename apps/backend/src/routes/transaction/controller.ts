@@ -22,7 +22,6 @@ export async function getAllTransactions(request: FastifyRequest, reply: Fastify
     reply.status(500).send({ message: 'Unknown error' });
   }
 }
-export default getAllTransactions;
 
 export async function createTransaction(request: FastifyRequest<{ Body: CreateTransactionBody }>, reply: FastifyReply) {
   const { date, description, tag, type, value } = request.body;

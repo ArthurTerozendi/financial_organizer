@@ -10,6 +10,7 @@ import dotenv from 'dotenv';
 import { LoginSchemas } from './routes/login/schema';
 import { SignUpSchemas } from './routes/signUp/schema';
 import { TransactionSchemas } from './routes/transaction/schema';
+import { DashboardSchemas } from './routes/dashboard/schema'
 import multipart from '@fastify/multipart';
 
 dotenv.config();
@@ -62,7 +63,7 @@ fastify.register(autoLoad, {
   options: { prefix: '/api' }
 });
 
-for (const schema of [...LoginSchemas, ...SignUpSchemas, ...TransactionSchemas]) {
+for (const schema of [...LoginSchemas, ...SignUpSchemas, ...TransactionSchemas, ...DashboardSchemas]) {
   fastify.addSchema(schema);
 }
 
