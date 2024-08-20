@@ -18,8 +18,6 @@ function App() {
     const response = await getRequest<Record<string, string>, { transactionsGrouped: { [key: string]: { count: number, label: string, color: string } } }>
     (ApiRoutes.dashboard.tags, { period: 'string' });
 
-    console.log(response.data);
-
     if (response.data?.transactionsGrouped) {
       const tagsData: { id: string, value: number, label: string, color: string}[] = [];
     
@@ -28,7 +26,6 @@ function App() {
         tagsData.push({ id: tagId, value: count, label, color }) 
       }
 
-      console.log(tagsData)
       setTransactionsGroupedByTag(tagsData)
     }
   }, [getRequest, setTransactionsGroupedByTag]);

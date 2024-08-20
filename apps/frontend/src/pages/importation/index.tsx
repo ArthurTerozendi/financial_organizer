@@ -31,7 +31,7 @@ const Importation: FC = () => {
     
     if (!form) return;
 
-    const response = await postRequest<
+    await postRequest<
       TransactionForm,
       TransactionForm>
     (ApiRoutes.transaction.create, {
@@ -41,8 +41,6 @@ const Importation: FC = () => {
         date: form.date,
         type: form.type,
     });
-
-    console.log(response)
   }, [postRequest, form]);
 
 
@@ -53,9 +51,7 @@ const Importation: FC = () => {
       const formData = new FormData();
       formData.append("file", file);
 
-      const response = await postRequest<FormData, unknown>(ApiRoutes.transaction.uploadFile, formData)
-
-      console.log(response);
+      await postRequest<FormData, unknown>(ApiRoutes.transaction.uploadFile, formData);
     }
   }, [postRequest])
 

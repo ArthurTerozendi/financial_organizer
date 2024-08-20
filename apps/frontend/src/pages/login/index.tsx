@@ -24,7 +24,6 @@ const Login = () => {
       email: form.email,
       password: form.password,
     }).then((result) => {
-      console.log(result);
       localStorage.setItem('jwtToken', result.data.token)
 
       navigate('/');
