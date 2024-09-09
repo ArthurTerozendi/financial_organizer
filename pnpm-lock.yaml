@@ -67,7 +67,7 @@ importers:
         version: 9.0.2
       luxon:
         specifier: ^3.4.4
-        version: 3.4.4
+        version: 3.5.0
       ofx-data-extractor:
         specifier: ^1.4.0
         version: 1.4.0
@@ -120,6 +120,9 @@ importers:
       axios:
         specifier: ^1.6.8
         version: 1.6.8
+      luxon:
+        specifier: ^3.5.0
+        version: 3.5.0
       react:
         specifier: ^18.3.1
         version: 18.3.1
@@ -130,6 +133,9 @@ importers:
         specifier: ^6.23.1
         version: 6.23.1(react-dom@18.3.1)(react@18.3.1)
     devDependencies:
+      '@types/luxon':
+        specifier: ^3.4.2
+        version: 3.4.2
       '@types/node':
         specifier: ^20
         version: 20.12.7
@@ -3827,8 +3833,8 @@ packages:
     dependencies:
       yallist: 4.0.0
 
-  /luxon@3.4.4:
-    resolution: {integrity: sha512-zobTr7akeGHnv7eBOXcRgMeCP6+uyYsczwmeRCauvpvaAltgNyTbLH/+VaEAPUeWBT+1GuNmz4wC/6jtQzbbVA==}
+  /luxon@3.5.0:
+    resolution: {integrity: sha512-rh+Zjr6DNfUYR3bPwJEnuwDdqMbxZW7LOQfUN4B54+Cl+0o5zaU9RJ6bcidfDtC1cWCZXQ+nvX8bf6bAji37QQ==}
     engines: {node: '>=12'}
     dev: false
 
