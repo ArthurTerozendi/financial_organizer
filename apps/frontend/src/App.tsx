@@ -11,10 +11,10 @@ function App() {
   const navigate = useNavigate();
   const { getRequest } = useApi(navigate);
 
-  const [transactionsGroupedByTag, setTransactionsGroupedByTag] = useState<{ id: string, value: number, label: string, color: string}[]>([])
+  const [transactionsGroupedByTag, setTransactionsGroupedByTag] = useState<{ id: string, value: number, label: string, color: string}[]>([]);
+  const [transactionsGroupedByYearMonth, setTransactionsGroupedByYearMonth] = useState<{ yearMonth: string, creditAmount: number, debitAmount: number }[]>([]);
 
-  const getTransactions = useCallback(async () => { 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const getTransactionsGroupedByTag = useCallback(async () => {
     const response = await getRequest<Record<string, string>, { transactionsGrouped: { [key: string]: { count: number, label: string, color: string } } }>
     (ApiRoutes.dashboard.tags, { period: 'string' });
 
@@ -30,9 +30,46 @@ function App() {
     }
   }, [getRequest, setTransactionsGroupedByTag]);
   
+  const getTransactionsGroupedByYearMonth = useCallback(async () => {
+    const response = await getRequest<Record<string, string>, { transactions: { yearMonth: string, creditAmount: number, debitAmount: number }[] }>
+    (ApiRoutes.dashboard.yearMonths);
+
+    if (response.data && response.data.transactions.length > 0) {
+      setTransactionsGroupedByYearMonth(response.data.transactions);
+    }
+  }, [getRequest, setTransactionsGroupedByYearMonth])
+
   useEffect(() => {
-    getTransactions();
-  }, [getTransactions])
+    getTransactionsGroupedByTag();
+    getTransactionsGroupedByYearMonth();
+  }, [getTransactionsGroupedByTag, getTransactionsGroupedByYearMonth])
+
+
+  const getYearMonthChartData = useCallback(() => {
+
+    return transactionsGroupedByYearMonth.reduce((acc, month) => {
+      acc.creditAmount.push(month.creditAmount);
+      acc.debitAmount.push(month.debitAmount);
+      acc.months.push((month.yearMonth));
+
+      return acc;
+    }, { months: [], creditAmount: [], debitAmount: [] } as { months: string[], creditAmount: number[], debitAmount: number[] })
+
+  }, [transactionsGroupedByYearMonth])
+
+  const getYearMonthChart = useCallback(() => {
+    const { months, creditAmount, debitAmount } = getYearMonthChartData();
+    return <>
+      <BarChart
+        className='h-1/2'
+        xAxis={[{ scaleType: 'band', data: months }]}
+        series={[
+          { data: creditAmount },
+          { data: debitAmount }
+        ]}
+      />
+    </>
+  }, [getYearMonthChartData])
 
   return (
     <DashboardLayout currentPage={PageEnum.Dashboard} title={Pages[PageEnum.Dashboard].label}>
@@ -54,13 +91,7 @@ function App() {
             test
           </div>
         </div>
-        <BarChart
-          className='h-1/2'
-          xAxis={[{ scaleType: 'band', data: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'] }]}
-          series={[
-            { data: [10, 5, 15, 20, 50, 0, 20, 30, 15, 10, 12, 40] },
-          ]}
-        />
+        {getYearMonthChart()}
       </div>
     </DashboardLayout>
   )

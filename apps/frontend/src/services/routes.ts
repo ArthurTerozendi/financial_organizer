@@ -8,6 +8,7 @@ export const ApiRoutes = {
   },
   dashboard: {
     tags: '/dashboard/tags',
+    yearMonths: '/dashboard/yearMonths'
   }
 
 }
