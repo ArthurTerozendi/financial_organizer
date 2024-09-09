@@ -6,6 +6,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { useApi } from './services/api';
 import { ApiRoutes } from './services/routes';
 import { useNavigate } from 'react-router-dom';
+import { DateTime } from 'luxon';
 
 function App() {
   const navigate = useNavigate();
@@ -48,9 +49,11 @@ function App() {
   const getYearMonthChartData = useCallback(() => {
 
     return transactionsGroupedByYearMonth.reduce((acc, month) => {
+      const date = DateTime.fromFormat(month.yearMonth, 'yyyy-LL').toFormat('LLL, yy')
+
       acc.creditAmount.push(month.creditAmount);
       acc.debitAmount.push(month.debitAmount);
-      acc.months.push((month.yearMonth));
+      acc.months.push((date));
 
       return acc;
     }, { months: [], creditAmount: [], debitAmount: [] } as { months: string[], creditAmount: number[], debitAmount: number[] })
@@ -64,8 +67,8 @@ function App() {
         className='h-1/2'
         xAxis={[{ scaleType: 'band', data: months }]}
         series={[
-          { data: creditAmount },
-          { data: debitAmount }
+          { data: creditAmount, label: 'Crédito', color: '#297c2d' },
+          { data: debitAmount, label: 'Débito', color: '#8d2a0b' }
         ]}
       />
     </>
