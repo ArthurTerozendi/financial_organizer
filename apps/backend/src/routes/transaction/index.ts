@@ -3,6 +3,7 @@ import { $ref } from "./schema";
 import {
   createTransaction,
   getAllTransactions,
+  getLastFiveTransactions,
   uploadFile,
 } from "./controller";
 
@@ -32,5 +33,13 @@ export default async function (fastify: FastifyInstance) {
       preHandler: [fastify.authenticate],
     },
     getAllTransactions,
+  );
+
+  fastify.get(
+    "/lastFiveTransactions",
+    {
+      preHandler: [fastify.authenticate],
+    },
+    getLastFiveTransactions,
   );
 }

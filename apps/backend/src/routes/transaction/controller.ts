@@ -106,3 +106,20 @@ export async function uploadFile(request: FastifyRequest, reply: FastifyReply) {
 
   reply.status(400).send({ error: "No file uploaded" });
 }
+
+export async function getLastFiveTransactions(
+  request: FastifyRequest,
+  reply: FastifyReply,
+) {
+  const transactions = await Db.instance.transaction.findMany({
+    where: {
+      userId: request.user.id,
+    },
+    orderBy: {
+      transactionDate: "desc",
+    },
+    take: 5,
+  });
+
+  reply.status(200).send({ transactions });
+}
