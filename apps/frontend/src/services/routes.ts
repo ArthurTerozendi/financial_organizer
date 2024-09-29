@@ -1,14 +1,13 @@
 export const ApiRoutes = {
-  login: '/login',
-  signUp: '/signUp',
+  login: "/login",
+  signUp: "/signUp",
   transaction: {
-    create: '/transaction',
-    uploadFile: '/transaction/uploadFile',
-    allTransactions: '/transaction/all',
+    create: "/transaction",
+    uploadFile: "/transaction/uploadFile",
+    allTransactions: "/transaction/all",
   },
   dashboard: {
-    tags: '/dashboard/tags',
-    yearMonths: '/dashboard/yearMonths'
-  }
-
-}
+    tags: "/dashboard/tags",
+    yearMonths: "/dashboard/yearMonths",
+  },
+};
