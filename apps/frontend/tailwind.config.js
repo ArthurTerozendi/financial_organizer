@@ -9,7 +9,8 @@ export default {
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
       colors: {
-        "dark-gray": "#2F3B51",
+        "md-gray": "#2F3B51",
+        "dark-gray": "#252E42",
         purple: "#4D18B4",
         "dark-purple": "#36117E",
         "light-purple": "#af50db",

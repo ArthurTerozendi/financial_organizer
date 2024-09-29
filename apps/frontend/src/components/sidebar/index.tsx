@@ -13,7 +13,7 @@ const Sidebar: FC<SidebarProps> = ({ selectedPage }) => {
   ];
 
   return (
-    <nav className="flex flex-col p-6 gap-3 bg-dark-gray w-60">
+    <nav className="flex flex-col p-6 gap-3 bg-md-gray w-60">
       {displayPage.map((page) => (
         <a
           key={`${page}_key`}

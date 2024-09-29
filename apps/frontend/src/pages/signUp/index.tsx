@@ -48,7 +48,7 @@ const SignUp: FC = () => {
   return (
     <div className="flex w-full h-full items-center justify-center">
       <form
-        className="flex flex-col w-80 align-center gap-14 bg-dark-gray p-8 rounded"
+        className="flex flex-col w-80 align-center gap-14 bg-md-gray p-8 rounded"
         onSubmit={handleSubmit}
       >
         <div className="flex flex-col gap-10 text-black">
