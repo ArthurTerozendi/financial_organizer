@@ -7,6 +7,9 @@ import { useApi } from "./services/api";
 import { ApiRoutes } from "./services/routes";
 import { useNavigate } from "react-router-dom";
 import { DateTime } from "luxon";
+import { Transaction } from "./pages/transactions/types";
+import ValueDisplay from "./components/valueDisplay";
+import TagBadge from "./components/tagBadge";
 
 function App() {
   const navigate = useNavigate();
@@ -19,6 +22,10 @@ function App() {
     useState<
       { yearMonth: string; creditAmount: number; debitAmount: number }[]
     >([]);
+
+  const [lastFiveTransactions, setLastFiveTransactions] = useState<
+    Transaction[]
+  >([]);
 
   const getTransactionsGroupedByTag = useCallback(async () => {
     const response = await getRequest<
@@ -65,16 +72,34 @@ function App() {
     }
   }, [getRequest, setTransactionsGroupedByYearMonth]);
 
+  const getLastFiveTransactions = useCallback(async () => {
+    const response = await getRequest<
+      Record<string, string>,
+      { transactions: Transaction[] }
+    >(ApiRoutes.transaction.lastFiveTransactions);
+
+    if (response.data && response.data.transactions.length > 0) {
+      setLastFiveTransactions(response.data.transactions);
+    }
+  }, [getRequest, setLastFiveTransactions]);
+
   useEffect(() => {
     getTransactionsGroupedByTag();
+  }, [getTransactionsGroupedByTag]);
+
+  useEffect(() => {
     getTransactionsGroupedByYearMonth();
-  }, [getTransactionsGroupedByTag, getTransactionsGroupedByYearMonth]);
+  }, [getTransactionsGroupedByYearMonth]);
+
+  useEffect(() => {
+    getLastFiveTransactions();
+  }, [getLastFiveTransactions]);
 
   const getYearMonthChartData = useCallback(() => {
     return transactionsGroupedByYearMonth.reduce(
       (acc, month) => {
         const date = DateTime.fromFormat(month.yearMonth, "yyyy-LL").toFormat(
-          "LLL, yy",
+          "LLL, yy"
         );
 
         acc.creditAmount.push(month.creditAmount);
@@ -87,7 +112,7 @@ function App() {
         months: string[];
         creditAmount: number[];
         debitAmount: number[];
-      },
+      }
     );
   }, [transactionsGroupedByYearMonth]);
 
@@ -113,8 +138,9 @@ function App() {
       title={Pages[PageEnum.Dashboard].label}
     >
       <div className="flex w-full h-full flex-col">
-        <div className="flex flex-row h-1/2">
+        <div className="flex flex-row">
           <PieChart
+            className="w-1/3"
             series={[
               {
                 innerRadius: 2,
@@ -126,7 +152,26 @@ function App() {
             width={400}
             height={200}
           />
-          <div>test</div>
+          <div className="flex flex-col gap-4 bg-md-gray rounded-lg p-4" style={{ width: "900px" }}>
+            {lastFiveTransactions.map((transaction) => (
+              <div key={transaction.id} className="flex flex-row gap-4 justify-between">
+                <div className="truncate w-2/4">{transaction.description}</div>
+                <TagBadge
+                  tagName={transaction.tag?.name}
+                  tagColor={transaction.tag?.color}
+                />
+                <ValueDisplay
+                  value={transaction.value}
+                  type={transaction.type}
+                />
+                <div>
+                  {DateTime.fromISO(transaction.transactionDate).toFormat(
+                    "dd LLL"
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
         {getYearMonthChart()}
       </div>
