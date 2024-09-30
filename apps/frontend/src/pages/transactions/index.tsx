@@ -43,32 +43,32 @@ const Transactions: FC = () => {
     >
       <div className="flex flex-row w-full h-full overflow-auto">
         <TableContainer>
-          <Table sx={{ color: "white" }}>
+          <Table className="text-neutral-200">
             <TableHead>
               <TableRow>
-                <TableCell sx={{ color: "white" }}> Descrição </TableCell>
-                <TableCell sx={{ color: "white" }}> Categoria </TableCell>
-                <TableCell sx={{ color: "white" }}> Valor </TableCell>
-                <TableCell sx={{ color: "white" }}> Data </TableCell>
-                <TableCell sx={{ color: "white" }}> Arquivo </TableCell>
+                <TableCell className="text-neutral-200"> Descrição </TableCell>
+                <TableCell className="text-neutral-200"> Categoria </TableCell>
+                <TableCell className="text-neutral-200"> Valor </TableCell>
+                <TableCell className="text-neutral-200"> Data </TableCell>
+                <TableCell className="text-neutral-200"> Arquivo </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {transactions.map((transaction) => (
                 <TableRow key={transaction.id}>
-                  <TableCell sx={{ color: "white" }}>
+                  <TableCell className="text-neutral-200">
                     {transaction.description}
                   </TableCell>
-                  <TableCell sx={{ color: "white" }}>
+                  <TableCell className="text-neutral-200">
                     <TagBadge tagName={transaction.tag?.name} tagColor={transaction.tag?.color} />
                   </TableCell>
-                  <TableCell sx={{ color: "white" }}>
+                  <TableCell className="text-neutral-200">
                     <ValueDisplay value={transaction.value} type={transaction.type}	/>
                   </TableCell>
-                  <TableCell sx={{ color: "white" }}>
+                  <TableCell className="text-neutral-200">
                     {DateTime.fromISO(transaction.transactionDate).toFormat("dd LLL yyyy")}
                   </TableCell>
-                  <TableCell sx={{ color: "white" }}>
+                  <TableCell className="text-neutral-200">
                     {transaction.bankStatement?.name}
                   </TableCell>
                 </TableRow>
