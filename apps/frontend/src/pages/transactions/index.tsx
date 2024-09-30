@@ -11,6 +11,9 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import DashboardLayout from "../../layouts/dashboard";
 import { PageEnum, Pages } from "../../components/sidebar/types";
+import ValueDisplay from "../../components/valueDisplay";
+import { DateTime } from "luxon";
+import TagBadge from "../../components/tagBadge";
 
 const Transactions: FC = () => {
   const navigate = useNavigate();
@@ -54,24 +57,19 @@ const Transactions: FC = () => {
               {transactions.map((transaction) => (
                 <TableRow key={transaction.id}>
                   <TableCell sx={{ color: "white" }}>
-                    {" "}
-                    {transaction.description}{" "}
+                    {transaction.description}
                   </TableCell>
                   <TableCell sx={{ color: "white" }}>
-                    {" "}
-                    {transaction.tag?.name}{" "}
+                    <TagBadge tagName={transaction.tag?.name} tagColor={transaction.tag?.color} />
                   </TableCell>
                   <TableCell sx={{ color: "white" }}>
-                    {" "}
-                    {transaction.value}{" "}
+                    <ValueDisplay value={transaction.value} type={transaction.type}	/>
                   </TableCell>
                   <TableCell sx={{ color: "white" }}>
-                    {" "}
-                    {transaction.transactionDate}{" "}
+                    {DateTime.fromISO(transaction.transactionDate).toFormat("dd LLL yyyy")}
                   </TableCell>
                   <TableCell sx={{ color: "white" }}>
-                    {" "}
-                    {transaction.bankStatement?.name}{" "}
+                    {transaction.bankStatement?.name}
                   </TableCell>
                 </TableRow>
               ))}
