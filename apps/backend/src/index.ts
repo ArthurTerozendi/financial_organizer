@@ -12,6 +12,7 @@ import { SignUpSchemas } from "./routes/signUp/schema";
 import { TransactionSchemas } from "./routes/transaction/schema";
 import { DashboardSchemas } from "./routes/dashboard/schema";
 import multipart from "@fastify/multipart";
+import { TagSchemas } from "./routes/tag/schema";
 
 dotenv.config();
 
@@ -74,6 +75,7 @@ for (const schema of [
   ...SignUpSchemas,
   ...TransactionSchemas,
   ...DashboardSchemas,
+  ...TagSchemas,
 ]) {
   fastify.addSchema(schema);
 }
