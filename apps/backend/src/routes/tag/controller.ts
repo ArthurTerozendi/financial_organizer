@@ -9,7 +9,7 @@ export const getAllTags = async (
   const tags = await Db.instance.tag.findMany({
     where: { userId: request.user.id },
   });
-  return reply.send(tags);
+  return reply.send({ tags });
 };
 
 export const createTag = async (
@@ -21,6 +21,5 @@ export const createTag = async (
   const tag = await Db.instance.tag.create({
     data: { color, name, userId: request.user.id },
   });
-  return reply.send(tag);
+  return reply.send({ tag });
 };
-

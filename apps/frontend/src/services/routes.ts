@@ -11,4 +11,5 @@ export const ApiRoutes = {
     tags: "/dashboard/tags",
     yearMonths: "/dashboard/yearMonths",
   },
+  tag: "/tag"
 };

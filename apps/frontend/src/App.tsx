@@ -1,3 +1,7 @@
+import { ThemeProvider } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
+import darkTheme from './theme';
+
 import { BarChart, PieChart } from "@mui/x-charts";
 import "./App.css";
 import { PageEnum, Pages } from "./components/sidebar/types";
@@ -133,53 +137,56 @@ function App() {
   }, [getYearMonthChartData]);
 
   return (
-    <DashboardLayout
-      currentPage={PageEnum.Dashboard}
-      title={Pages[PageEnum.Dashboard].label}
-    >
-      <div className="flex w-full h-full flex-col">
-        <div className="flex justify-evenly flex-col lg:flex-row ">
-          <div className="flex justify-center items-center">
-            <PieChart
-              series={[
-                {
-                  innerRadius: 2,
-                  cornerRadius: 4,
-                  paddingAngle: 2,
-                  data: transactionsGroupedByTag,
-                },
-              ]}
-              width={400}
-              height={200}
-            />
-          </div>
-          <div className="flex flex-col gap-4 bg-md-gray rounded-lg p-4 max-h-[50vh] overflow-y-auto">
-            {lastFiveTransactions.map((transaction) => (
-              <div
-                key={transaction.id}
-                className="flex flex-row gap-4 justify-between"
-              >
-                <div className="truncate w-2/4">{transaction.description}</div>
-                <TagBadge
-                  tagName={transaction.tag?.name}
-                  tagColor={transaction.tag?.color}
-                />
-                <ValueDisplay
-                  value={transaction.value}
-                  type={transaction.type}
-                />
-                <div>
-                  {DateTime.fromISO(transaction.transactionDate).toFormat(
-                    "dd LLL"
-                  )}
+    <ThemeProvider theme={darkTheme}>
+      <CssBaseline />
+      <DashboardLayout
+        currentPage={PageEnum.Dashboard}
+        title={Pages[PageEnum.Dashboard].label}
+      >
+        <div className="flex w-full h-full flex-col">
+          <div className="flex justify-evenly flex-col lg:flex-row ">
+            <div className="flex justify-center items-center">
+              <PieChart
+                series={[
+                  {
+                    innerRadius: 2,
+                    cornerRadius: 4,
+                    paddingAngle: 2,
+                    data: transactionsGroupedByTag,
+                  },
+                ]}
+                width={400}
+                height={200}
+              />
+            </div>
+            <div className="flex flex-col gap-4 bg-md-gray rounded-lg p-4 max-h-[50vh] overflow-y-auto">
+              {lastFiveTransactions.map((transaction) => (
+                <div
+                  key={transaction.id}
+                  className="flex flex-row gap-4 justify-between"
+                >
+                  <div className="truncate w-2/4">{transaction.description}</div>
+                  <TagBadge
+                    tagName={transaction.tag?.name}
+                    tagColor={transaction.tag?.color}
+                  />
+                  <ValueDisplay
+                    value={transaction.value}
+                    type={transaction.type}
+                  />
+                  <div>
+                    {DateTime.fromISO(transaction.transactionDate).toFormat(
+                      "dd LLL"
+                    )}
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
+          {getYearMonthChart()}
         </div>
-        {getYearMonthChart()}
-      </div>
-    </DashboardLayout>
+      </DashboardLayout>
+    </ThemeProvider>
   );
 }
 

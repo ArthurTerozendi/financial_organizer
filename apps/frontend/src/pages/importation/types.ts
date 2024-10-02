@@ -5,3 +5,9 @@ export interface TransactionForm {
   type: "Credit" | "Debit";
   date: string;
 }
+
+export interface Tag {
+  id: string;
+  name: string;
+  color: string;
+}

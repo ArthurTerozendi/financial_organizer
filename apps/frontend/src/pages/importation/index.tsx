@@ -1,18 +1,19 @@
-"use client";
-
 import { Input } from "../../components/input";
 import { useApi } from "../../services/api";
 import { ApiRoutes } from "../../services/routes";
-import { ChangeEvent, FC, useCallback, useState } from "react";
-import { TransactionForm } from "./types";
+import { ChangeEvent, FC, useCallback, useEffect, useState } from "react";
+import { Tag, TransactionForm } from "./types";
 import { useNavigate } from "react-router-dom";
 import { PageEnum, Pages } from "../../components/sidebar/types";
 import DashboardLayout from "../../layouts/dashboard";
+import Dropdown from "../../components/dropdown";
+import CreateTagModal from "./createTagModal";
 
 const Importation: FC = () => {
   const navigate = useNavigate();
-  const { postRequest } = useApi(navigate);
-
+  const { postRequest, getRequest } = useApi(navigate);
+  const [tags, setTags] = useState<Tag[]>([]);
+  const [openModal, setOpenModal] = useState(false);
   const [form, setForm] = useState<TransactionForm>({
     date: "",
     description: "",
@@ -25,12 +26,24 @@ const Importation: FC = () => {
     (value: string | number, key: string) => {
       setForm((prev) => ({ ...prev, [key]: value }));
     },
-    [setForm],
+    [setForm]
   );
+
+  const getTags = useCallback(async () => {
+    const response = await getRequest<Record<string, never>, { tags: Tag[] }>(
+      ApiRoutes.tag
+    );
+    console.log(response.data);
+    setTags(response.data?.tags || []);
+  }, [getRequest, setTags]);
+
+  useEffect(() => {
+    getTags();
+  }, [getTags]);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleFormSubmit = useCallback(
-    async (e: any) => {
+    async (e: { preventDefault: () => void }) => {
       e.preventDefault();
 
       if (!form) return;
@@ -43,10 +56,10 @@ const Importation: FC = () => {
           value: form.value,
           date: form.date,
           type: form.type,
-        },
+        }
       );
     },
-    [postRequest, form],
+    [postRequest, form]
   );
 
   const handleUploadSubmit = useCallback(
@@ -59,11 +72,11 @@ const Importation: FC = () => {
 
         await postRequest<FormData, unknown>(
           ApiRoutes.transaction.uploadFile,
-          formData,
+          formData
         );
       }
     },
-    [postRequest],
+    [postRequest]
   );
 
   return (
@@ -82,11 +95,14 @@ const Importation: FC = () => {
             onChange={(e) => handleFormChange(e.target.value, "description")}
             type="text"
           />
-          <Input
+          <Dropdown
             label="Categoria"
-            value={form.tag}
-            onChange={(e) => handleFormChange(e.target.value, "tag")}
-            type="text"
+            selectedValue={form.tag}
+            onChange={handleFormChange}
+            options={tags}
+            openModal={() => {
+              setOpenModal(true);
+            }}
           />
           <div className="flex flex-row gap-3 items-center">
             <div className="w-1/2">
@@ -127,8 +143,7 @@ const Importation: FC = () => {
               className="bg-purple py-1 px-4 text-white rounded font-semibold text-sm"
               onClick={(e) => handleFormSubmit(e)}
             >
-              {" "}
-              Criar{" "}
+              Criar
             </button>
           </div>
         </form>
@@ -150,6 +165,12 @@ const Importation: FC = () => {
           />
         </div>
       </div>
+      <CreateTagModal
+        open={openModal}
+        onClose={() => {
+          setOpenModal(false);
+        }}
+      />
     </DashboardLayout>
   );
 };
