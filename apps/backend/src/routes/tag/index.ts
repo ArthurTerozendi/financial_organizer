@@ -17,7 +17,7 @@ export default async function (fastify: FastifyInstance) {
       preHandler: [fastify.authenticate],
       schema: {
         body: $ref("CreateTagSchema"),
-      }
+      },
     },
     createTag
   );
