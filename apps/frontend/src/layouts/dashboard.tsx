@@ -16,7 +16,7 @@ const DashboardLayout: FC<DashboardLayoutProps> = ({
   return (
     <section className="flex flex-row w-full h-full gap-8 bg-dark-gray">
       <Sidebar selectedPage={currentPage} />
-      <section className="flex flex-col w-full p-4 pl-0">
+      <section className="flex flex-col w-full p-4 pl-0  overflow-auto">
         <div className="w-full pt-8 text-4xl font-semibold"> {title} </div>
         <div className="w-full h-full">{children}</div>
       </section>

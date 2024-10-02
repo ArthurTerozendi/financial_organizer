@@ -119,7 +119,7 @@ function App() {
   const getYearMonthChart = useCallback(() => {
     const { months, creditAmount, debitAmount } = getYearMonthChartData();
     return (
-      <>
+      <div className="flex flex-grow">
         <BarChart
           className="h-1/2"
           xAxis={[{ scaleType: "band", data: months }]}
@@ -128,7 +128,7 @@ function App() {
             { data: debitAmount, label: "Débito", color: "#8d2a0b" },
           ]}
         />
-      </>
+      </div>
     );
   }, [getYearMonthChartData]);
 
@@ -138,23 +138,27 @@ function App() {
       title={Pages[PageEnum.Dashboard].label}
     >
       <div className="flex w-full h-full flex-col">
-        <div className="flex flex-row">
-          <PieChart
-            className="w-1/3"
-            series={[
-              {
-                innerRadius: 2,
-                cornerRadius: 4,
-                paddingAngle: 2,
-                data: transactionsGroupedByTag,
-              },
-            ]}
-            width={400}
-            height={200}
-          />
-          <div className="flex flex-col gap-4 bg-md-gray rounded-lg p-4" style={{ width: "900px" }}>
+        <div className="flex justify-evenly flex-col lg:flex-row ">
+          <div className="flex justify-center items-center">
+            <PieChart
+              series={[
+                {
+                  innerRadius: 2,
+                  cornerRadius: 4,
+                  paddingAngle: 2,
+                  data: transactionsGroupedByTag,
+                },
+              ]}
+              width={400}
+              height={200}
+            />
+          </div>
+          <div className="flex flex-col gap-4 bg-md-gray rounded-lg p-4 max-h-[50vh] overflow-y-auto">
             {lastFiveTransactions.map((transaction) => (
-              <div key={transaction.id} className="flex flex-row gap-4 justify-between">
+              <div
+                key={transaction.id}
+                className="flex flex-row gap-4 justify-between"
+              >
                 <div className="truncate w-2/4">{transaction.description}</div>
                 <TagBadge
                   tagName={transaction.tag?.name}
