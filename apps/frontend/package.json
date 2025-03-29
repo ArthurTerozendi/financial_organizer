@@ -13,6 +13,7 @@
     "@emotion/react": "^11.13.0",
     "@emotion/styled": "^11.13.0",
     "@financial-organizer/db": "workspace:^",
+    "@mui/icons-material": "^7.0.1",
     "@mui/material": "^5.16.0",
     "@mui/styled-engine": "^5.16.6",
     "@mui/x-charts": "^7.13.0",

@@ -46,14 +46,16 @@ const Login = () => {
   }, [navigate]);
 
   return (
-    <div className="flex w-full h-full items-center justify-center login-background">
+    <div className="flex w-full min-h-screen items-center justify-center login-background px-4">
       <form
-        className="flex flex-col w-80 align-center gap-14 bg-md-gray p-8 rounded"
+        className="flex flex-col w-full max-w-sm align-center gap-8 md:gap-14 bg-md-gray p-6 md:p-8 rounded-lg shadow-lg"
         onSubmit={handleFormSubmit}
       >
-        <div className="flex flex-col gap-10 text-black">
-          <h3 className="text-lg text-white font-bold"> Entrar </h3>
-          <div className="flex gap-5 flex-col">
+        <div className="flex flex-col gap-6 md:gap-10 text-black">
+          <h3 className="text-xl md:text-2xl text-white font-bold text-center">
+            Login to Financial Organizer
+          </h3>
+          <div className="flex gap-4 md:gap-5 flex-col">
             <Input
               label="Email"
               type="text"
@@ -68,18 +70,18 @@ const Login = () => {
             />
           </div>
         </div>
-        <div className="flex flex-col gap-1">
-          <input
+        <div className="flex flex-col gap-2">
+          <button
             type="submit"
-            value="Entrar"
-            className="bg-purple py-2 text-white rounded font-semibold text-sm"
-          />
+            className="bg-purple hover:bg-dark-purple py-3 text-white rounded-lg font-semibold text-sm transition-colors duration-200"
+          >
+            Login
+          </button>
           <a
             href="/signUp"
-            className="text-xs text-right text-slate-400 cursor-pointer hover:underline"
+            className="text-sm text-center text-slate-400 cursor-pointer hover:text-white transition-colors duration-200"
           >
-            {" "}
-            Cadastre-se aqui{" "}
+            Don't have an account? Sign up here
           </a>
         </div>
       </form>

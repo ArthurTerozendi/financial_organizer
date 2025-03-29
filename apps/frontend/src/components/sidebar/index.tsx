@@ -1,9 +1,5 @@
 import { FC } from "react";
-import { PageEnum, Pages } from "./types";
-
-interface SidebarProps extends Partial<HTMLDivElement> {
-  selectedPage: PageEnum;
-}
+import { PageEnum, Pages, SidebarProps } from "./types";
 
 const Sidebar: FC<SidebarProps> = ({ selectedPage }) => {
   const displayPage = [
@@ -13,26 +9,18 @@ const Sidebar: FC<SidebarProps> = ({ selectedPage }) => {
   ];
 
   return (
-    <nav className="flex flex-col p-6 gap-3 bg-md-gray w-60 h-full">
+    <nav className="flex flex-col p-4 md:p-6 gap-3 bg-md-gray w-full md:w-60 min-h-[250px] md:h-full">
       {displayPage.map((page) => (
         <a
           key={`${page}_key`}
-          className={`cursor-pointer hover:underline first:mt-10 min-w-36 ${selectedPage === page ? "underline" : ""}`}
-          style={
+          className={`cursor-pointer hover:underline text-sm md:text-base py-2 px-3 rounded-lg transition-colors duration-200 ${
             selectedPage === page
-              ? {
-                  color: "#af50db",
-                  textDecorationLine: "underline",
-                  textDecorationColor: "#af50db",
-                  textUnderlineOffset: "0.2rem",
-                  textDecorationThickness: "2px",
-                }
-              : {}
-          }
+              ? "bg-purple/20 text-light-purple"
+              : "hover:bg-md-gray/50"
+          }`}
           href={Pages[page].url}
         >
-          {" "}
-          {Pages[page].label}{" "}
+          {Pages[page].label}
         </a>
       ))}
     </nav>

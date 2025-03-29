@@ -1,6 +1,6 @@
-import { ThemeProvider } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
-import darkTheme from './theme';
+import { ThemeProvider } from "@mui/material/styles";
+import CssBaseline from "@mui/material/CssBaseline";
+import darkTheme from "./theme";
 
 import { BarChart, PieChart } from "@mui/x-charts";
 import "./App.css";
@@ -125,11 +125,10 @@ function App() {
     return (
       <div className="flex flex-grow">
         <BarChart
-          className="h-1/2"
           xAxis={[{ scaleType: "band", data: months }]}
           series={[
             { data: creditAmount, label: "Crédito", color: "#297c2d" },
-            { data: debitAmount, label: "Débito", color: "#8d2a0b" },
+            { data: debitAmount, label: "Débito", color: "#ef4444" },
           ]}
         />
       </div>
@@ -160,12 +159,15 @@ function App() {
               />
             </div>
             <div className="flex flex-col gap-4 bg-md-gray rounded-lg p-4 max-h-[50vh] overflow-y-auto">
+              <h3 className="text-lg font-semibold">Recent Transactions</h3>
               {lastFiveTransactions.map((transaction) => (
                 <div
                   key={transaction.id}
                   className="flex flex-row gap-4 justify-between"
                 >
-                  <div className="truncate w-2/4">{transaction.description}</div>
+                  <div className="truncate w-2/4">
+                    {transaction.description}
+                  </div>
                   <TagBadge
                     tagName={transaction.tag?.name}
                     tagColor={transaction.tag?.color}
@@ -174,7 +176,7 @@ function App() {
                     value={transaction.value}
                     type={transaction.type}
                   />
-                  <div>
+                  <div className="text-sm text-gray-400">
                     {DateTime.fromISO(transaction.transactionDate).toFormat(
                       "dd LLL"
                     )}

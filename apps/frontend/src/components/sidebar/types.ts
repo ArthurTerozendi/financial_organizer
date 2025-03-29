@@ -13,3 +13,7 @@ export const Pages: { [key in PageEnum]: { label: string; url: string } } = {
   [PageEnum.Login]: { label: "Login", url: "/login" },
   [PageEnum.SignUp]: { label: "Sign Up", url: "/signUp" },
 };
+
+export interface SidebarProps extends Partial<HTMLDivElement> {
+  selectedPage: PageEnum;
+}
