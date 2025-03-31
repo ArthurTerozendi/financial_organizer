@@ -86,7 +86,7 @@ export async function uploadFile(request: FastifyRequest, reply: FastifyReply) {
         (transaction) => {
           const transactionValue = Number(transaction.TRNAMT);
           return {
-            description: transaction.MEMO,
+            description: transaction.MEMO || "No description",
             value: Math.abs(transactionValue),
             type: (transactionValue > 0 ? "Credit" : "Debit") as
               | "Credit"
