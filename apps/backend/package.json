@@ -11,7 +11,6 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "module",
   "dependencies": {
     "@fastify/autoload": "^5.8.0",
     "@fastify/cors": "^9.0.1",
