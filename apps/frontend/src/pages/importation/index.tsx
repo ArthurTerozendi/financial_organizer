@@ -170,6 +170,7 @@ const Importation: FC = () => {
         onClose={() => {
           setOpenModal(false);
         }}
+        setTags={setTags}
       />
     </DashboardLayout>
   );

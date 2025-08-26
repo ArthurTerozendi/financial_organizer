@@ -1,13 +1,15 @@
 import { Box, Fade, Modal, Typography } from "@mui/material";
-import { FC, useCallback, useEffect, useState } from "react";
+import { FC, useCallback, useEffect, useState, Dispatch, SetStateAction } from "react";
 import { Input } from "../../../components/input";
 import { useApi } from "../../../services/api";
 import { useNavigate } from "react-router-dom";
 import { ApiRoutes } from "../../../services/routes";
+import { Tag } from "../types";
 
 interface CreateTagModalProps {
   open: boolean;
   onClose: () => void;
+  setTags: Dispatch<SetStateAction<Tag[]>>;
 }
 
 const style = {
@@ -22,7 +24,7 @@ const style = {
   p: 4,
 };
 
-const CreateTagModal: FC<CreateTagModalProps> = ({ open, onClose }) => {
+const CreateTagModal: FC<CreateTagModalProps> = ({ open, onClose, setTags }) => {
   const [form, setForm] = useState({
     name: "",
     color: "",
@@ -36,7 +38,13 @@ const CreateTagModal: FC<CreateTagModalProps> = ({ open, onClose }) => {
 
   const createTag = useCallback(() => {
     postRequest(ApiRoutes.tag, form);
-  }, [postRequest, form]);
+    setTags((tags) => [...tags, {
+        id: crypto.randomUUID(),
+        name: form.name,
+        color: form.color,
+      },
+    ]);
+  }, [postRequest, form, setTags]);
 
   const handleSubmit = useCallback(() => {
     createTag();
