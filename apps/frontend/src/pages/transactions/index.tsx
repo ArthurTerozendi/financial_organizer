@@ -14,6 +14,7 @@ import { PageEnum, Pages } from "../../components/sidebar/types";
 import ValueDisplay from "../../components/valueDisplay";
 import { DateTime } from "luxon";
 import TagBadge from "../../components/tagBadge";
+import EmptyState from "../../components/emptyState";
 
 const Transactions: FC = () => {
   const navigate = useNavigate();
@@ -42,40 +43,47 @@ const Transactions: FC = () => {
       title={Pages[PageEnum.Transactions].label}
     >
       <div className="flex flex-row w-full h-full overflow-auto">
-        <TableContainer>
-          <Table className="text-neutral-200">
-            <TableHead>
-              <TableRow>
-                <TableCell className="text-neutral-200"> Descrição </TableCell>
-                <TableCell className="text-neutral-200"> Categoria </TableCell>
-                <TableCell className="text-neutral-200"> Valor </TableCell>
-                <TableCell className="text-neutral-200"> Data </TableCell>
-                <TableCell className="text-neutral-200"> Arquivo </TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {transactions.map((transaction) => (
-                <TableRow key={transaction.id}>
-                  <TableCell className="text-neutral-200">
-                    {transaction.description}
-                  </TableCell>
-                  <TableCell className="text-neutral-200">
-                    <TagBadge tagName={transaction.tag?.name} tagColor={transaction.tag?.color} />
-                  </TableCell>
-                  <TableCell className="text-neutral-200">
-                    <ValueDisplay value={transaction.value} type={transaction.type}	/>
-                  </TableCell>
-                  <TableCell className="text-neutral-200">
-                    {DateTime.fromISO(transaction.transactionDate).toFormat("dd LLL yyyy")}
-                  </TableCell>
-                  <TableCell className="text-neutral-200">
-                    {transaction.bankStatement?.name}
-                  </TableCell>
+        {transactions.length === 0 ? (
+          <EmptyState
+            title="No transactions yet"
+            description="Import a bank statement or add a transaction to see them listed here."
+          />
+        ) : (
+          <TableContainer>
+            <Table className="text-neutral-200">
+              <TableHead>
+                <TableRow>
+                  <TableCell className="text-neutral-200"> Descrição </TableCell>
+                  <TableCell className="text-neutral-200"> Categoria </TableCell>
+                  <TableCell className="text-neutral-200"> Valor </TableCell>
+                  <TableCell className="text-neutral-200"> Data </TableCell>
+                  <TableCell className="text-neutral-200"> Arquivo </TableCell>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
+              </TableHead>
+              <TableBody>
+                {transactions.map((transaction) => (
+                  <TableRow key={transaction.id}>
+                    <TableCell className="text-neutral-200">
+                      {transaction.description}
+                    </TableCell>
+                    <TableCell className="text-neutral-200">
+                      <TagBadge tagName={transaction.tag?.name} tagColor={transaction.tag?.color} />
+                    </TableCell>
+                    <TableCell className="text-neutral-200">
+                      <ValueDisplay value={transaction.value} type={transaction.type} />
+                    </TableCell>
+                    <TableCell className="text-neutral-200">
+                      {DateTime.fromISO(transaction.transactionDate).toFormat("dd LLL yyyy")}
+                    </TableCell>
+                    <TableCell className="text-neutral-200">
+                      {transaction.bankStatement?.name}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        )}
       </div>
     </DashboardLayout>
   );
