@@ -21,7 +21,24 @@ const fastify = Fastify({
 
 async function start() {
   fastify.register(multipart);
-  fastify.register(cors);
+  const allowedOrigins = [
+    "http://localhost:3000",
+    "https://financial-organizer-frontend.vercel.app",
+  ];
+
+  fastify.register(cors, {
+    origin: (origin, cb) => {
+      if (!origin) {
+        cb(null, true);
+        return;
+      }
+      const isAllowed = allowedOrigins.includes(origin);
+      cb(null, isAllowed);
+    },
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  });
 
   await fastify.register(fastifySwagger, {
     openapi: {
