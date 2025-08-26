@@ -20,11 +20,16 @@ export function useApi(navigate: NavigateFunction) {
       },
     ): Promise<ApiResponse<T2>> => {
       const token = localStorage.getItem("jwtToken");
+      const headers: Record<string, string> = {};
+
+      if (token !== null && token !== undefined && token !== "undefined" && token !== "null" && token !== "") {
+        headers.Authorization = `Bearer ${token}`;
+      }
 
       return axios
         .request<T1, ApiResponse<T2>>({
           baseURL: import.meta.env.VITE_API_URL,
-          headers: { Authorization: `Bearer ${token}` },
+          headers,
           method: options.method,
           url,
           data: options.body,
@@ -33,7 +38,7 @@ export function useApi(navigate: NavigateFunction) {
           return response;
         })
         .catch((e) => {
-          if (e.response.status === 401) {
+          if (e.response?.status === 401) {
             localStorage.removeItem("jwtToken");
             navigate("/login");
           }
