@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { SingUpBody } from "./schema";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import { Db, Prisma } from "@financial-organizer/db";
 
 export async function singUp(

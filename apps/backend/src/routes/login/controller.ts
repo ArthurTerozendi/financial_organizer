@@ -1,7 +1,7 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { LoginBody } from "./schema";
 import { Db } from "@financial-organizer/db";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 
 export async function login(
   req: FastifyRequest<{ Body: LoginBody }>,
