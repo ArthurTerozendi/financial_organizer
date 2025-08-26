@@ -1,6 +1,7 @@
 import axios from "axios";
 import { Input } from "../../components/input";
 import { FC, FormEvent, useCallback, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 type SignUpForm = {
   email: string;
@@ -16,6 +17,10 @@ const SignUp: FC = () => {
     name: "",
     confirmPassword: "",
   });
+  const [errorMessage, setErrorMessage] = useState<string | null>(
+    null,
+  );
+  const navigate = useNavigate();
 
   const handleFormChange = useCallback(
     (value: string, field: keyof SignUpForm) => {
@@ -27,22 +32,31 @@ const SignUp: FC = () => {
   const handleSubmit = useCallback(
     (e: FormEvent<HTMLFormElement>) => {
       e.preventDefault();
+      setErrorMessage(null);
 
       if (form.password !== form.confirmPassword) {
-        console.error("Password doesn't match");
+        setErrorMessage("As senhas não conferem.");
         return;
       }
 
       axios
-        .post(process.env.VITE_API_URL + "/signUp/", {
+        .post(import.meta.env.VITE_API_URL + "/signUp/", {
           email: form.email,
           name: form.name,
           password: form.password,
         })
-        .then((result) => console.log(result))
-        .catch((error) => console.error(error));
+        .then(() => {
+          navigate("/login");
+        })
+        .catch((error) => {
+          const apiMessage =
+            error?.response?.data?.message ||
+            error?.message ||
+            "Falha ao cadastrar. Tente novamente.";
+          setErrorMessage(apiMessage);
+        });
     },
-    [form],
+    [form, navigate],
   );
 
   return (
@@ -51,6 +65,11 @@ const SignUp: FC = () => {
         className="flex flex-col w-80 align-center gap-14 bg-md-gray p-8 rounded"
         onSubmit={handleSubmit}
       >
+        {errorMessage && (
+          <div className="text-sm text-red-400 bg-red-900/20 border border-red-500/40 rounded p-2">
+            {errorMessage}
+          </div>
+        )}
         <div className="flex flex-col gap-10 text-black">
           <div>
             <a
@@ -91,10 +110,10 @@ const SignUp: FC = () => {
             />
           </div>
         </div>
-        <div className="flex flex-col gap-1">
+        <div className="flex flex-col gap-1 cursor-pointer">
           <input
             type="submit"
-            className="bg-purple py-2 text-white rounded font-semibold text-sm"
+            className="bg-purple py-2 text-white rounded font-semibold text-sm cursor-pointer"
             value="Cadastrar"
           />
         </div>
