@@ -82,6 +82,10 @@ async function start() {
     return next();
   });
 
+  fastify.get("/health", (_, res) => {
+    res.send({ status: "ok" });
+  });
+
   fastify.decorate(
     "authenticate",
     async (req: FastifyRequest, reply: FastifyReply) => {
