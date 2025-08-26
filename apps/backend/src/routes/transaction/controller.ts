@@ -4,6 +4,7 @@ import { Ofx } from "ofx-data-extractor";
 import { Db } from "@financial-organizer/db";
 import { parseDate } from "../../utils";
 import { DateTime } from "luxon";
+import { STRTTRN } from "ofx-data-extractor/dist/@types/ofx";
 
 export async function getAllTransactions(
   request: FastifyRequest,
@@ -81,23 +82,21 @@ export async function uploadFile(request: FastifyRequest, reply: FastifyReply) {
         userId: id,
       },
     });
-    const transactions =
-      ofxResponse.OFX.BANKMSGSRSV1.STMTTRNRS.STMTRS.BANKTRANLIST.STRTTRN.map(
-        (transaction) => {
-          const transactionValue = Number(transaction.TRNAMT);
-          return {
-            description: transaction.MEMO || "No description",
-            value: Math.abs(transactionValue),
-            type: (transactionValue > 0 ? "Credit" : "Debit") as
-              | "Credit"
-              | "Debit",
-            transactionDate: parseDate(transaction.DTPOSTED as any) ?? "",
-            fitId: transaction.FITID.toString(),
-            userId: id,
-            bankStatementId: bankStatement.id,
-          };
-        },
-      );
+    const transactions = (
+      ofxResponse?.OFX?.BANKMSGSRSV1?.STMTTRNRS?.STMTRS?.BANKTRANLIST
+        ?.STRTTRN ?? []
+    ).map((transaction: STRTTRN) => {
+      const transactionValue = Number(transaction.TRNAMT);
+      return {
+        description: transaction.MEMO || "No description",
+        value: Math.abs(transactionValue),
+        type: (transactionValue > 0 ? "Credit" : "Debit") as "Credit" | "Debit",
+        transactionDate: parseDate(transaction.DTPOSTED as any) ?? "",
+        fitId: transaction.FITID.toString(),
+        userId: id,
+        bankStatementId: bankStatement.id,
+      };
+    });
     await Db.instance.transaction.createMany({
       data: transactions,
     });
