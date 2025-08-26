@@ -104,7 +104,7 @@ export async function uploadFile(request: FastifyRequest, reply: FastifyReply) {
     reply.status(200).send("ok");
   }
 
-  reply.status(400).send({ error: "No file uploaded" });
+  reply.status(400).send({ error: "Nenhum arquivo enviado" });
 }
 
 export async function getLastFiveTransactions(

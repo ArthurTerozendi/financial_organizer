@@ -55,7 +55,7 @@ const Login = () => {
       >
         {(errorMessage) && (
           <div className="text-sm text-red-400 bg-red-900/20 border border-red-500/40 rounded p-2">
-            errorMessage
+            {errorMessage}
           </div>
         )}
         <div className="flex flex-col gap-6 md:gap-10 text-black">

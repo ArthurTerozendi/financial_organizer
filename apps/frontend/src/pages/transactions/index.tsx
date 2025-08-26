@@ -45,8 +45,8 @@ const Transactions: FC = () => {
       <div className="flex flex-row w-full h-full overflow-auto">
         {transactions.length === 0 ? (
           <EmptyState
-            title="No transactions yet"
-            description="Import a bank statement or add a transaction to see them listed here."
+            title="Nenhuma transação encontrada"
+            description="Importe um extrato bancário ou adicione uma transação para ver elas listadas aqui."
           />
         ) : (
           <TableContainer>

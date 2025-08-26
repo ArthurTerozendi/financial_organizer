@@ -45,7 +45,7 @@ export async function getCountTransactionsGroupByTag(
 
     reply.status(200).send({ transactionsGrouped });
   } catch (error) {
-    reply.status(500).send({ message: "Unknown error" });
+    reply.status(500).send({ message: "Erro desconhecido" });
   }
 }
 
@@ -91,6 +91,6 @@ export async function getTransactionsGroupByMonth(
 
     reply.status(200).send({ transactions: result });
   } catch (error) {
-    reply.status(500).send({ message: "Unknown error" });
+    reply.status(500).send({ message: "Erro desconhecido" });
   }
 }

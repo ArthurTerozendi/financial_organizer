@@ -147,8 +147,8 @@ function App() {
           {transactionsGroupedByTag.length === 0 &&
           lastFiveTransactions.length === 0 ? (
             <EmptyState
-              title="Welcome to your dashboard"
-              description="Start by importing a bank statement or creating your first transaction to see insights here."
+              title="Bem-vindo ao seu painel"
+              description="Comece importando um extrato bancário ou criando sua primeira transação para ver insights aqui."
             />
           ) : (
             <>
@@ -168,7 +168,7 @@ function App() {
                   />
                 </div>
                 <div className="flex flex-col gap-4 bg-md-gray rounded-lg p-4 max-h-[50vh] overflow-y-auto">
-                  <h3 className="text-lg font-semibold">Recent Transactions</h3>
+                  <h3 className="text-lg font-semibold">Transações recentes</h3>
                   {lastFiveTransactions.map((transaction) => (
                     <div
                       key={transaction.id}

@@ -19,14 +19,14 @@ export async function singUp(
       },
     });
 
-    reply.status(201).send({ message: "New user created!" });
+    reply.status(201).send({ message: "Novo usuário criado!" });
   } catch (error) {
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
       if (error.code === "P2002") {
         return reply.status(409).send({
-          error: "Email already in use",
+          error: "Esse e-mail já está em uso",
           message:
-            "The email you provide is already associated with another account",
+            "O e-mail que você forneceu já está associado a outra conta",
         });
       }
     }

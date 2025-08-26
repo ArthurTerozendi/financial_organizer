@@ -18,7 +18,7 @@ export async function login(
   if (!user) {
     return reply
       .status(404)
-      .send({ message: "Wrong email", status: "NOT_FOUND" });
+      .send({ message: "E-mail incorreto", status: "NOT_FOUND" });
   }
 
   const isValidPassword = bcrypt.compareSync(password, user.password);
@@ -26,7 +26,7 @@ export async function login(
   if (!isValidPassword) {
     return reply
       .status(404)
-      .send({ message: "Wrong password", status: "BAD_REQUEST" });
+      .send({ message: "Senha incorreta", status: "BAD_REQUEST" });
   }
 
   const payload = {
