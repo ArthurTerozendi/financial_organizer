@@ -1,3 +1,10 @@
+export type StatementTransaction = {
+  TRNAMT: string | number;
+  MEMO?: string;
+  DTPOSTED?: unknown;
+  FITID: string | number;
+};
+
 export type MetaData = {
   OFXHEADER: string;
   DATA: string;

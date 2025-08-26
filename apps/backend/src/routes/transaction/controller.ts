@@ -4,7 +4,7 @@ import { Ofx } from "ofx-data-extractor";
 import { Db } from "@financial-organizer/db";
 import { parseDate } from "../../utils";
 import { DateTime } from "luxon";
-import { STRTTRN } from "./types";
+import { StatementTransaction } from "./types";
 
 export async function getAllTransactions(
   request: FastifyRequest,
@@ -83,9 +83,10 @@ export async function uploadFile(request: FastifyRequest, reply: FastifyReply) {
       },
     });
     const transactions = (
-      ofxResponse?.OFX?.BANKMSGSRSV1?.STMTTRNRS?.STMTRS?.BANKTRANLIST
-        ?.STRTTRN ?? []
-    ).map((transaction: STRTTRN) => {
+      (
+        ofxResponse?.OFX?.BANKMSGSRSV1?.STMTTRNRS?.STMTRS?.BANKTRANLIST?.STRTTRN ?? []
+      ) as StatementTransaction[]
+    ).map((transaction: StatementTransaction) => {
       const transactionValue = Number(transaction.TRNAMT);
       return {
         description: transaction.MEMO || "No description",
