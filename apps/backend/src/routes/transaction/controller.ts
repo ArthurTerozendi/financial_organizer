@@ -4,7 +4,7 @@ import { Ofx } from "ofx-data-extractor";
 import { Db } from "@financial-organizer/db";
 import { parseDate } from "../../utils";
 import { DateTime } from "luxon";
-import { STRTTRN } from "ofx-data-extractor/dist/@types/ofx";
+import { STRTTRN } from "./types";
 
 export async function getAllTransactions(
   request: FastifyRequest,
