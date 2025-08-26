@@ -34,7 +34,7 @@ const SignUp: FC = () => {
       }
 
       axios
-        .post(`http://localhost:8080/api/signUp/`, {
+        .post(process.env.VITE_API_URL + "/signUp/", {
           email: form.email,
           name: form.name,
           password: form.password,

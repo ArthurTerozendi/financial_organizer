@@ -25,7 +25,7 @@ const Login = () => {
       e.preventDefault();
 
       axios
-        .post("http://localhost:8080/api/login/", {
+        .post(process.env.VITE_API_URL + "/login/", {
           email: form.email,
           password: form.password,
         })
