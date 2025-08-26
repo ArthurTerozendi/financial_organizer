@@ -1,14 +1,15 @@
-import { Prisma as P, PrismaClient } from "@prisma/client";
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Db = exports.Prisma = void 0;
+const client_1 = require("@prisma/client");
 function getPrismaClient() {
     if (!global._prismaClient_) {
-        global._prismaClient_ = new PrismaClient();
+        global._prismaClient_ = new client_1.PrismaClient();
     }
     return global._prismaClient_;
 }
-export const Prisma = P;
-export class Db {
-    ref;
-    static self;
+exports.Prisma = client_1.Prisma;
+class Db {
     static get instance() {
         if (!this.self) {
             this.self = new Db();
@@ -19,4 +20,4 @@ export class Db {
         this.ref = ref;
     }
 }
-//# sourceMappingURL=index.js.map
+exports.Db = Db;
