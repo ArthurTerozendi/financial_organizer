@@ -1,7 +1,7 @@
 export function register() {
   if ('serviceWorker' in navigator && process.env.NODE_ENV === 'production') {
     window.addEventListener('load', () => {
-      const swUrl = `${import.meta.env.VITE_API_URL}/serviceWorker.js`;
+      const swUrl = `${window.location.origin}/serviceWorker.js`;
       navigator.serviceWorker
         .register(swUrl)
         .then((registration) => {
