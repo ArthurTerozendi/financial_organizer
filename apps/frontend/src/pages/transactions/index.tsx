@@ -58,15 +58,40 @@ const Transactions: FC = () => {
             description="Importe um extrato bancário ou adicione uma transação para ver elas listadas aqui."
           />
         ) : (
-          <TableContainer>
-            <Table className="text-neutral-200">
+          <TableContainer sx={{ maxHeight: "calc(100vh - 200px)" }}>
+            <Table className="text-neutral-200" stickyHeader>
               <TableHead>
                 <TableRow>
-                  <TableCell className="text-neutral-200"> Descrição </TableCell>
-                  <TableCell className="text-neutral-200"> Categoria </TableCell>
-                  <TableCell className="text-neutral-200"> Valor </TableCell>
-                  <TableCell className="text-neutral-200"> Data </TableCell>
-                  <TableCell className="text-neutral-200"> Arquivo </TableCell>
+                  <TableCell
+                    className="text-neutral-200"
+                    sx={{ backgroundColor: "#252e42" }}
+                  >
+                    Descrição
+                  </TableCell>
+                  <TableCell
+                    className="text-neutral-200"
+                    sx={{ backgroundColor: "#252e42" }}
+                  >
+                    Categoria
+                  </TableCell>
+                  <TableCell
+                    className="text-neutral-200"
+                    sx={{ backgroundColor: "#252e42" }}
+                  >
+                    Valor
+                  </TableCell>
+                  <TableCell
+                    className="text-neutral-200"
+                    sx={{ backgroundColor: "#252e42" }}
+                  >
+                    Data
+                  </TableCell>
+                  <TableCell
+                    className="text-neutral-200"
+                    sx={{ backgroundColor: "#252e42" }}
+                  >
+                    Arquivo
+                  </TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -76,13 +101,21 @@ const Transactions: FC = () => {
                       {transaction.description}
                     </TableCell>
                     <TableCell className="text-neutral-200">
-                      <TagBadge tagName={transaction.tag?.name} tagColor={transaction.tag?.color} />
+                      <TagBadge
+                        tagName={transaction.tag?.name}
+                        tagColor={transaction.tag?.color}
+                      />
                     </TableCell>
                     <TableCell className="text-neutral-200">
-                      <ValueDisplay value={transaction.value} type={transaction.type} />
+                      <ValueDisplay
+                        value={transaction.value}
+                        type={transaction.type}
+                      />
                     </TableCell>
                     <TableCell className="text-neutral-200">
-                      {DateTime.fromISO(transaction.transactionDate).toFormat("dd LLL yyyy")}
+                      {DateTime.fromISO(transaction.transactionDate).toFormat(
+                        "dd LLL yyyy"
+                      )}
                     </TableCell>
                     <TableCell className="text-neutral-200">
                       {transaction.bankStatement?.name}
