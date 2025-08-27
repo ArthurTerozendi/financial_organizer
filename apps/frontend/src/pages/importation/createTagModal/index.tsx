@@ -1,6 +1,7 @@
 import { Box, Fade, Modal, Typography } from "@mui/material";
 import { FC, useCallback, useState, Dispatch, SetStateAction } from "react";
 import { Input } from "../../../components/input";
+import { ColorPicker } from "../../../components/colorPicker";
 import { useApi } from "../../../services/api";
 import { useNavigate } from "react-router-dom";
 import { ApiRoutes } from "../../../services/routes";
@@ -35,6 +36,10 @@ const CreateTagModal: FC<CreateTagModalProps> = ({ open, onClose, setTags, onTag
 
   const handleFormChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
+  }, [form]);
+
+  const handleColorChange = useCallback((color: string) => {
+    setForm({ ...form, color });
   }, [form]);
 
   const createTag = useCallback(() => {
@@ -72,12 +77,11 @@ const CreateTagModal: FC<CreateTagModalProps> = ({ open, onClose, setTags, onTag
                 value={form.name}
                 onChange={handleFormChange}
               />
-              <Input
+              <ColorPicker
                 label="Cor"
-                type="color"
                 name="color"
                 value={form.color}
-                onChange={handleFormChange}
+                onChange={handleColorChange}
               />
             </div>
             <div className="flex justify-end items-start">
