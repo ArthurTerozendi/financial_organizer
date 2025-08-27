@@ -16,10 +16,10 @@ export const createTag = async (
   request: FastifyRequest<{ Body: CreateTagBody }>,
   reply: FastifyReply
 ) => {
-  const { name, color } = request.body;
+  const { name, color, id } = request.body;
 
   const tag = await Db.instance.tag.create({
-    data: { color, name, userId: request.user.id },
+    data: { color, name, userId: request.user.id, id },
   });
   return reply.send({ tag });
 };

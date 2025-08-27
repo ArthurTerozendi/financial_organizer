@@ -39,7 +39,7 @@ const CreateTagModal: FC<CreateTagModalProps> = ({ open, onClose, setTags, onTag
 
   const createTag = useCallback(() => {
     const newTagId = crypto.randomUUID();
-    postRequest(ApiRoutes.tag, form);
+    postRequest(ApiRoutes.tag, {...form, id: newTagId});
     setTags((tags) => [...tags, {
         id: newTagId,
         name: form.name,

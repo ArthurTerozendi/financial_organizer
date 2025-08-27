@@ -4,6 +4,7 @@ import { buildJsonSchemas } from "fastify-zod";
 const CreateTagSchema = z.object({
   name: z.string(),
   color: z.string(),
+  id: z.string(),
 });
 
 export type CreateTagBody = z.infer<typeof CreateTagSchema>;
