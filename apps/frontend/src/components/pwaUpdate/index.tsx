@@ -1,10 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { Snackbar, Alert, Button } from '@mui/material';
 import { Update, Close } from '@mui/icons-material';
+import { useLocation } from 'react-router-dom';
 
 const PWAUpdate: React.FC = () => {
   const [showUpdatePrompt, setShowUpdatePrompt] = useState(false);
   const [waitingWorker, setWaitingWorker] = useState<ServiceWorker | null>(null);
+  const location = useLocation();
+
+  // Don't show update prompt on auth pages
+  const isAuthPage = location.pathname === '/login' || location.pathname === '/signUp';
+  const isAuthenticated = !!localStorage.getItem('jwtToken');
 
   useEffect(() => {
     if ('serviceWorker' in navigator) {
@@ -46,16 +52,24 @@ const PWAUpdate: React.FC = () => {
             newWorker.addEventListener('statechange', () => {
               if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
                 setWaitingWorker(newWorker);
-                setShowUpdatePrompt(true);
+                
+                // Only show update prompt if user is authenticated and not on auth pages
+                if (isAuthenticated && !isAuthPage) {
+                  // Add a small delay to prevent flickering
+                  setTimeout(() => {
+                    setShowUpdatePrompt(true);
+                  }, 1000);
+                }
               }
             });
           }
         });
       });
     }
-  }, []);
+  }, [isAuthenticated, isAuthPage]);
 
-  if (!showUpdatePrompt) {
+  // Don't show on auth pages or if not authenticated
+  if (isAuthPage || !isAuthenticated || !showUpdatePrompt) {
     return null;
   }
 

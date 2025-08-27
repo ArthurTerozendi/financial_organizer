@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Snackbar, Alert } from '@mui/material';
 import { Download, Close } from '@mui/icons-material';
+import { useLocation } from 'react-router-dom';
 
 interface BeforeInstallPromptEvent extends Event {
   readonly platforms: string[];
@@ -15,6 +16,11 @@ const PWAInstall: React.FC = () => {
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [showInstallPrompt, setShowInstallPrompt] = useState(false);
   const [isInstalled, setIsInstalled] = useState(false);
+  const location = useLocation();
+
+  // Don't show install prompt on auth pages
+  const isAuthPage = location.pathname === '/login' || location.pathname === '/signUp';
+  const isAuthenticated = !!localStorage.getItem('jwtToken');
 
   useEffect(() => {
     // Check if app is already installed
@@ -27,7 +33,11 @@ const PWAInstall: React.FC = () => {
     const handleBeforeInstallPrompt = (e: Event) => {
       e.preventDefault();
       setDeferredPrompt(e as BeforeInstallPromptEvent);
-      setShowInstallPrompt(true);
+      
+      // Only show install prompt if user is authenticated and not on auth pages
+      if (isAuthenticated && !isAuthPage) {
+        setShowInstallPrompt(true);
+      }
     };
 
     const handleAppInstalled = () => {
@@ -43,7 +53,7 @@ const PWAInstall: React.FC = () => {
       window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
       window.removeEventListener('appinstalled', handleAppInstalled);
     };
-  }, []);
+  }, [isAuthenticated, isAuthPage]);
 
   const handleInstallClick = async () => {
     if (!deferredPrompt) return;
@@ -65,7 +75,8 @@ const PWAInstall: React.FC = () => {
     setShowInstallPrompt(false);
   };
 
-  if (isInstalled || !showInstallPrompt) {
+  // Don't show on auth pages, if not authenticated, or if already installed
+  if (isAuthPage || !isAuthenticated || isInstalled || !showInstallPrompt) {
     return null;
   }
 
