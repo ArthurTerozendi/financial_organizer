@@ -15,6 +15,7 @@ import { Transaction } from "./pages/transactions/types";
 import ValueDisplay from "./components/valueDisplay";
 import TagBadge from "./components/tagBadge";
 import EmptyState from "./components/emptyState";
+import { DashboardSkeleton } from "./components/skeleton";
 
 function App() {
   const navigate = useNavigate();
@@ -31,6 +32,7 @@ function App() {
   const [lastFiveTransactions, setLastFiveTransactions] = useState<
     Transaction[]
   >([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const getTransactionsGroupedByTag = useCallback(async () => {
     const response = await getRequest<
@@ -89,16 +91,21 @@ function App() {
   }, [getRequest, setLastFiveTransactions]);
 
   useEffect(() => {
-    getTransactionsGroupedByTag();
-  }, [getTransactionsGroupedByTag]);
+    const loadDashboardData = async () => {
+      setIsLoading(true);
+      try {
+        await Promise.all([
+          getTransactionsGroupedByTag(),
+          getTransactionsGroupedByYearMonth(),
+          getLastFiveTransactions(),
+        ]);
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-  useEffect(() => {
-    getTransactionsGroupedByYearMonth();
-  }, [getTransactionsGroupedByYearMonth]);
-
-  useEffect(() => {
-    getLastFiveTransactions();
-  }, [getLastFiveTransactions]);
+    loadDashboardData();
+  }, [getTransactionsGroupedByTag, getTransactionsGroupedByYearMonth, getLastFiveTransactions]);
 
   const getYearMonthChartData = useCallback(() => {
     return transactionsGroupedByYearMonth.reduce(
@@ -144,7 +151,9 @@ function App() {
         title={Pages[PageEnum.Dashboard].label}
       >
         <div className="flex w-full h-full flex-col">
-          {transactionsGroupedByTag.length === 0 &&
+          {isLoading ? (
+            <DashboardSkeleton />
+          ) : transactionsGroupedByTag.length === 0 &&
           lastFiveTransactions.length === 0 ? (
             <EmptyState
               title="Bem-vindo ao seu painel"

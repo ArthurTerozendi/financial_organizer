@@ -15,21 +15,28 @@ import ValueDisplay from "../../components/valueDisplay";
 import { DateTime } from "luxon";
 import TagBadge from "../../components/tagBadge";
 import EmptyState from "../../components/emptyState";
+import { TableSkeleton } from "../../components/skeleton";
 
 const Transactions: FC = () => {
   const navigate = useNavigate();
   const { getRequest } = useApi(navigate);
 
   const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const getTransactions = useCallback(async () => {
-    const response = await getRequest<
-      Record<string, never>,
-      { transactions: Transaction[] }
-    >(ApiRoutes.transaction.allTransactions);
+    setIsLoading(true);
+    try {
+      const response = await getRequest<
+        Record<string, never>,
+        { transactions: Transaction[] }
+      >(ApiRoutes.transaction.allTransactions);
 
-    if (response.data?.transactions) {
-      setTransactions(response.data.transactions);
+      if (response.data?.transactions) {
+        setTransactions(response.data.transactions);
+      }
+    } finally {
+      setIsLoading(false);
     }
   }, [getRequest, setTransactions]);
 
@@ -43,7 +50,9 @@ const Transactions: FC = () => {
       title={Pages[PageEnum.Transactions].label}
     >
       <div className="flex flex-row w-full h-full overflow-auto">
-        {transactions.length === 0 ? (
+        {isLoading ? (
+          <TableSkeleton rows={8} columns={5} />
+        ) : transactions.length === 0 ? (
           <EmptyState
             title="Nenhuma transação encontrada"
             description="Importe um extrato bancário ou adicione uma transação para ver elas listadas aqui."

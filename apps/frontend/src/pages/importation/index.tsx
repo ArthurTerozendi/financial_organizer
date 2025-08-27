@@ -169,7 +169,7 @@ const Importation: FC = () => {
             </div>
             <div className="w-1/2 flex flex-row gap-2 mt-4">
               <Input
-                label="Crédito"
+                label="Recebido"
                 onChange={() => handleFormChange("Credit", "type")}
                 type="radio"
                 name="type-credit"
@@ -177,7 +177,7 @@ const Importation: FC = () => {
                 checked={form.type === "Credit"}
               />
               <Input
-                label="Débito"
+                label="Pago"
                 onChange={() => handleFormChange("Debit", "type")}
                 type="radio"
                 name="type-debit"
