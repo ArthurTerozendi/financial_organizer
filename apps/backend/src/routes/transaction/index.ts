@@ -4,6 +4,7 @@ import {
   createTransaction,
   getAllTransactions,
   getLastFiveTransactions,
+  updateTransaction,
   uploadFile,
 } from "./controller";
 
@@ -41,5 +42,13 @@ export default async function (fastify: FastifyInstance) {
       preHandler: [fastify.authenticate],
     },
     getLastFiveTransactions,
+  );
+
+  fastify.patch(
+    "/:id",
+    {
+      preHandler: [fastify.authenticate],
+    },
+    updateTransaction,
   );
 }

@@ -6,6 +6,7 @@ export const ApiRoutes = {
     uploadFile: "/transaction/uploadFile",
     allTransactions: "/transaction/all",
     lastFiveTransactions: "/transaction/lastFiveTransactions",
+    update: "/transaction",
   },
   dashboard: {
     tags: "/dashboard/tags",

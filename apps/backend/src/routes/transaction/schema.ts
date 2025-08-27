@@ -11,9 +11,24 @@ const CreateTransactionSchema = z.object({
 
 export type CreateTransactionBody = z.infer<typeof CreateTransactionSchema>;
 
+const UpdateTransactionSchema = z.object({
+
+  description: z.string(),
+  tag: z.string().optional(),
+  value: z.number(),
+  date: z.string(),
+  type: z.string(),
+});
+
+export type UpdateTransactionBody = z.infer<typeof UpdateTransactionSchema>;
+
 export const { schemas: TransactionSchemas, $ref } = buildJsonSchemas(
   {
     CreateTransactionSchema,
+    UpdateTransactionSchema,
   },
   { $id: "TransactionSchema" },
 );
+
+
+  

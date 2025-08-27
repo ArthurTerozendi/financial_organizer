@@ -1,5 +1,5 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { CreateTransactionBody } from "./schema";
+import { CreateTransactionBody, UpdateTransactionBody } from "./schema";
 import { Ofx } from "ofx-data-extractor";
 import { Db } from "@financial-organizer/db";
 import { parseDate } from "../../utils";
@@ -246,4 +246,45 @@ export async function getLastFiveTransactions(
   });
 
   reply.status(200).send({ transactions });
+}
+
+export async function updateTransaction(
+  request: FastifyRequest<{
+    Params: { id: string };
+    Body: UpdateTransactionBody;
+  }>,
+  reply: FastifyReply
+) {
+  const { id } = request.params;
+  const { description, tag, type, value, date } = request.body;
+
+  const dateFormatted = DateTime.fromISO(date).toUTC();
+
+  if (!dateFormatted.isValid)
+    return reply.status(400).send({ message: "Date invalid" });
+
+  const transaction = await Db.instance.transaction.findUnique({
+    where: { id },
+  });
+
+  if (!transaction)
+    return reply.status(404).send({ message: "Transaction not found" });
+
+  const formattedTag = tag === "" || tag === null || tag === undefined ? null : tag;
+
+  const updatedTransaction = await Db.instance.transaction.update({
+    where: { id },
+    data: {
+      description,
+      type: type as "Credit" | "Debit",
+      value,
+      transactionDate: dateFormatted.toISO(),
+      tagId: formattedTag,
+    },
+    include: {
+      tag: true,
+    },
+  });
+
+  reply.status(200).send({ transaction: updatedTransaction });
 }
