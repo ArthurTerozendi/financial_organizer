@@ -21,6 +21,8 @@ const Importation: FC = () => {
     type: "Credit",
     value: 0,
   });
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
   const handleFormChange = useCallback(
     (value: string | number, key: string) => {
@@ -28,6 +30,21 @@ const Importation: FC = () => {
     },
     [setForm]
   );
+
+  const clearForm = useCallback(() => {
+    setForm({
+      date: "",
+      description: "",
+      tag: "",
+      type: "Credit",
+      value: 0,
+    });
+  }, [setForm]);
+
+  const showMessage = useCallback((type: 'success' | 'error', text: string) => {
+    setMessage({ type, text });
+    setTimeout(() => setMessage(null), 5000); 
+  }, [setMessage]);
 
   const getTags = useCallback(async () => {
     const response = await getRequest<Record<string, never>, { tags: Tag[] }>(
@@ -47,9 +64,12 @@ const Importation: FC = () => {
 
       if (!form) return;
       
+      setLoading(true);
+      setMessage(null);
+      
       const selectedTagName = tags.find((t) => t.id === form.tag)?.name || form.tag;
 
-      await postRequest<TransactionForm, TransactionForm>(
+      const response = await postRequest<TransactionForm, TransactionForm>(
         ApiRoutes.transaction.create,
         {
           description: form.description,
@@ -59,8 +79,17 @@ const Importation: FC = () => {
           type: form.type,
         }
       );
+      
+      if (response.type === "error") {
+        showMessage('error', 'Erro ao criar transação. Tente novamente.');
+      } else {
+        showMessage('success', 'Transação criada com sucesso!');
+        clearForm();
+      }
+      
+      setLoading(false);
     },
-    [postRequest, form, tags]
+    [postRequest, form, tags, clearForm, showMessage]
   );
 
   const handleUploadSubmit = useCallback(
@@ -68,16 +97,27 @@ const Importation: FC = () => {
       const file = e.target.files?.[0];
 
       if (file) {
+        setLoading(true);
+        setMessage(null);
+        
         const formData = new FormData();
         formData.append("file", file);
 
-        await postRequest<FormData, unknown>(
+        const response = await postRequest<FormData, unknown>(
           ApiRoutes.transaction.uploadFile,
           formData
         );
+        
+        if (response.type === "error") {
+          showMessage('error', 'Erro ao importar arquivo. Tente novamente.');
+        } else {
+          showMessage('success', 'Arquivo importado com sucesso!');
+        }
+        
+        setLoading(false);
       }
     },
-    [postRequest]
+    [postRequest, showMessage]
   );
 
   return (
@@ -85,6 +125,16 @@ const Importation: FC = () => {
       currentPage={PageEnum.Importations}
       title={Pages[PageEnum.Importations].label}
     >
+      {message && (
+        <div className={`mt-4 p-3 rounded-md ${
+          message.type === 'success' 
+            ? 'bg-green-100 border border-green-400 text-green-700' 
+            : 'bg-red-100 border border-red-400 text-red-700'
+        }`}>
+          {message.text}
+        </div>
+      )}
+
       <div className="flex flex-row w-full">
         <form
           className="flex gap-8 flex-col mt-8 w-2/6 h-full"
@@ -92,6 +142,7 @@ const Importation: FC = () => {
         >
           <Input
             label="Descrição"
+            name="description"
             value={form.description}
             onChange={(e) => handleFormChange(e.target.value, "description")}
             type="text"
@@ -136,6 +187,7 @@ const Importation: FC = () => {
             </div>
           </div>
           <Input
+            name="date"
             label="Data"
             value={form.date}
             onChange={(e) => handleFormChange(e.target.value, "date")}
@@ -143,20 +195,29 @@ const Importation: FC = () => {
           />
           <div className="flex justify-end items-start">
             <button
-              className="bg-purple py-1 px-4 text-white rounded font-semibold text-sm"
+              className={`py-1 px-4 text-white rounded font-semibold text-sm ${
+                loading 
+                  ? 'bg-gray-400 cursor-not-allowed' 
+                  : 'bg-purple hover:bg-purple/90'
+              }`}
               onClick={(e) => handleFormSubmit(e)}
+              disabled={loading}
             >
-              Criar
+              {loading ? 'Criando...' : 'Criar'}
             </button>
           </div>
         </form>
         <div className="flex justify-end items-start w-4/6 mt-8 pr-2">
           <label
             htmlFor="uploadFile"
-            className="bg-purple py-1 px-4 text-white rounded font-semibold text-sm cursor-pointer"
+            className={`py-1 px-4 text-white rounded font-semibold text-sm cursor-pointer ${
+              loading 
+                ? 'bg-gray-400 cursor-not-allowed' 
+                : 'bg-purple hover:bg-purple/90'
+            }`}
             title="Importar arquivo OFX"
           >
-            Importar Extrato{" "}
+            {loading ? 'Importando...' : 'Importar Extrato (OFX)'}
           </label>
           <input
             id="uploadFile"
@@ -165,6 +226,7 @@ const Importation: FC = () => {
             onChange={handleUploadSubmit}
             hidden={true}
             accept=".ofx"
+            disabled={loading}
           />
         </div>
       </div>

@@ -30,7 +30,7 @@ export const Input: FC<InputProps> = ({
 
   return (
     <div className="flex flex-col gap-1">
-      <label className="font-regular text-xs text-white"> {label} </label>
+      <label htmlFor={name} className="font-regular text-xs text-white"> {label} </label>
       <input
         className="border rounded-md focus:outline-none focus:shadow-outline p-1 text-sm text-stone-800 bg-white"
         type={type}
