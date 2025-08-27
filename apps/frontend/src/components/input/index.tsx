@@ -7,6 +7,7 @@ export const Input: FC<InputProps> = ({
   value,
   onChange,
   name,
+  checked,
 }) => {
   if (type === "radio" || type === "checkbox") {
     return (
@@ -14,11 +15,15 @@ export const Input: FC<InputProps> = ({
         <input
           className="border rounded-md focus:outline-none focus:shadow-outline p-1 text-sm text-stone-800"
           type={type}
+          id={name}
           value={value}
           onChange={onChange}
           name={name}
+          checked={checked}
         />
-        <label className="font-regular text-xs text-white"> {label} </label>
+        <label htmlFor={name} className="font-regular text-xs text-white">
+          {label}
+        </label>
       </div>
     );
   }
@@ -29,6 +34,7 @@ export const Input: FC<InputProps> = ({
       <input
         className="border rounded-md focus:outline-none focus:shadow-outline p-1 text-sm text-stone-800 bg-white"
         type={type}
+        id={name}
         value={value}
         onChange={onChange}
         name={name}

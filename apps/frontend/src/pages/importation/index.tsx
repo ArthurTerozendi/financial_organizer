@@ -33,7 +33,6 @@ const Importation: FC = () => {
     const response = await getRequest<Record<string, never>, { tags: Tag[] }>(
       ApiRoutes.tag
     );
-    console.log(response.data);
     setTags(response.data?.tags || []);
   }, [getRequest, setTags]);
 
@@ -47,19 +46,21 @@ const Importation: FC = () => {
       e.preventDefault();
 
       if (!form) return;
+      
+      const selectedTagName = tags.find((t) => t.id === form.tag)?.name || form.tag;
 
       await postRequest<TransactionForm, TransactionForm>(
         ApiRoutes.transaction.create,
         {
           description: form.description,
-          tag: form.tag,
+          tag: selectedTagName,
           value: form.value,
           date: form.date,
           type: form.type,
         }
       );
     },
-    [postRequest, form]
+    [postRequest, form, tags]
   );
 
   const handleUploadSubmit = useCallback(
@@ -118,17 +119,19 @@ const Importation: FC = () => {
             <div className="w-1/2 flex flex-row gap-2 mt-4">
               <Input
                 label="Crédito"
-                onChange={(e) => handleFormChange(e.target.value, "type")}
+                onChange={() => handleFormChange("Credit", "type")}
                 type="radio"
-                name="type"
-                value={form.type}
+                name="type-credit"
+                value="Credit"
+                checked={form.type === "Credit"}
               />
               <Input
                 label="Débito"
-                onChange={(e) => handleFormChange(e.target.value, "type")}
+                onChange={() => handleFormChange("Debit", "type")}
                 type="radio"
-                name="type"
-                value={form.type}
+                name="type-debit"
+                value="Debit"
+                checked={form.type === "Debit"}
               />
             </div>
           </div>
@@ -171,6 +174,10 @@ const Importation: FC = () => {
           setOpenModal(false);
         }}
         setTags={setTags}
+        onTagCreated={(tagId) => {
+          handleFormChange(tagId, "tag");
+          setOpenModal(false);
+        }}
       />
     </DashboardLayout>
   );

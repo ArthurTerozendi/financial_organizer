@@ -1,5 +1,5 @@
 import { Box, Fade, Modal, Typography } from "@mui/material";
-import { FC, useCallback, useEffect, useState, Dispatch, SetStateAction } from "react";
+import { FC, useCallback, useState, Dispatch, SetStateAction } from "react";
 import { Input } from "../../../components/input";
 import { useApi } from "../../../services/api";
 import { useNavigate } from "react-router-dom";
@@ -10,6 +10,7 @@ interface CreateTagModalProps {
   open: boolean;
   onClose: () => void;
   setTags: Dispatch<SetStateAction<Tag[]>>;
+  onTagCreated?: (tagId: string) => void;
 }
 
 const style = {
@@ -24,7 +25,7 @@ const style = {
   p: 4,
 };
 
-const CreateTagModal: FC<CreateTagModalProps> = ({ open, onClose, setTags }) => {
+const CreateTagModal: FC<CreateTagModalProps> = ({ open, onClose, setTags, onTagCreated }) => {
   const [form, setForm] = useState({
     name: "",
     color: "",
@@ -37,23 +38,23 @@ const CreateTagModal: FC<CreateTagModalProps> = ({ open, onClose, setTags }) => 
   }, [form]);
 
   const createTag = useCallback(() => {
+    const newTagId = crypto.randomUUID();
     postRequest(ApiRoutes.tag, form);
     setTags((tags) => [...tags, {
-        id: crypto.randomUUID(),
+        id: newTagId,
         name: form.name,
         color: form.color,
       },
     ]);
-  }, [postRequest, form, setTags]);
+    if (onTagCreated) {
+      onTagCreated(newTagId);
+    }
+  }, [postRequest, form, setTags, onTagCreated]);
 
   const handleSubmit = useCallback(() => {
     createTag();
     onClose();
   }, [createTag, onClose]);
-
-  useEffect(() => {
-    console.log(form);
-  }, [form]);
 
   return (
     <Modal open={open} onClose={onClose}>
@@ -90,9 +91,6 @@ const CreateTagModal: FC<CreateTagModalProps> = ({ open, onClose, setTags }) => 
           </div>
         </Box>
       </Fade>
-      {/* <div className="flex flex-col gap-4">
-        <h1 className="text-xl font-bold">Criar nova categoria</h1>
-      </div> */}
     </Modal>
   );
 };
