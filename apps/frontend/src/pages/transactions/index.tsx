@@ -76,8 +76,7 @@ const Transactions: FC = () => {
     >
       <div className="flex flex-row w-full h-full overflow-auto">
         <div className="flex-1">
-          <div className="flex justify-between items-center mb-6">
-            <h1 className="text-2xl font-semibold text-white">Transações</h1>
+          <div className="flex md:justify-end sm:justify-start md:mt-0 mt-4 items-center mb-6">
             <button
               onClick={() => setIsSidebarOpen(true)}
               className="bg-purple hover:bg-purple/90 text-white px-4 py-2 rounded-md font-semibold flex items-center gap-2"
