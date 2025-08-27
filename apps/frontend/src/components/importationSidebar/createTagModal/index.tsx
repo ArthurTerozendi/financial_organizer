@@ -1,11 +1,11 @@
 import { Box, Fade, Modal, Typography } from "@mui/material";
 import { FC, useCallback, useState, Dispatch, SetStateAction } from "react";
-import { Input } from "../../../components/input";
-import { ColorPicker } from "../../../components/colorPicker";
-import { useApi } from "../../../services/api";
 import { useNavigate } from "react-router-dom";
-import { ApiRoutes } from "../../../services/routes";
 import { Tag } from "../types";
+import { useApi } from "../../../services/api";
+import { ApiRoutes } from "../../../services/routes";
+import { ColorPicker } from "../../colorPicker";
+import { Input } from "../../input";
 
 interface CreateTagModalProps {
   open: boolean;

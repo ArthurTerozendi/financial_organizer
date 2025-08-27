@@ -6,7 +6,6 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Login from "./pages/login/index.tsx";
 import SignUp from "./pages/signUp/index.tsx";
 import Transactions from "./pages/transactions/index.tsx";
-import Importation from "./pages/importation/index.tsx";
 import { createTheme } from "@mui/material/styles";
 import { ThemeProvider } from "@emotion/react";
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
@@ -19,10 +18,6 @@ const router = createBrowserRouter([
   {
     path: "/transactions",
     element: <Transactions />,
-  },
-  {
-    path: "/importation",
-    element: <Importation />,
   },
   {
     path: "/login",

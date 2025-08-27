@@ -16,6 +16,7 @@ import { DateTime } from "luxon";
 import TagBadge from "../../components/tagBadge";
 import EmptyState from "../../components/emptyState";
 import { TableSkeleton } from "../../components/skeleton";
+import ImportationSidebar from "../../components/importationSidebar";
 
 const Transactions: FC = () => {
   const navigate = useNavigate();
@@ -23,6 +24,7 @@ const Transactions: FC = () => {
 
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const getTransactions = useCallback(async () => {
     setIsLoading(true);
@@ -50,6 +52,19 @@ const Transactions: FC = () => {
       title={Pages[PageEnum.Transactions].label}
     >
       <div className="flex flex-row w-full h-full overflow-auto">
+        <div className="flex-1">
+          <div className="flex justify-between items-center mb-6">
+            <h1 className="text-2xl font-semibold text-white">Transações</h1>
+            <button
+              onClick={() => setIsSidebarOpen(true)}
+              className="bg-purple hover:bg-purple/90 text-white px-4 py-2 rounded-md font-semibold flex items-center gap-2"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+              </svg>
+              Importar Transação
+            </button>
+          </div>
         {isLoading ? (
           <TableSkeleton rows={8} columns={5} />
         ) : transactions.length === 0 ? (
@@ -126,7 +141,14 @@ const Transactions: FC = () => {
             </Table>
           </TableContainer>
         )}
+        </div>
       </div>
+
+      <ImportationSidebar
+        isOpen={isSidebarOpen}
+        onClose={() => setIsSidebarOpen(false)}
+        onTransactionCreated={getTransactions}
+      />
     </DashboardLayout>
   );
 };

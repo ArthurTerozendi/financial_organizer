@@ -5,7 +5,6 @@ const Sidebar: FC<SidebarProps> = ({ selectedPage }) => {
   const displayPage = [
     PageEnum.Dashboard,
     PageEnum.Transactions,
-    PageEnum.Importations,
   ];
 
   const handleLogout = () => {
