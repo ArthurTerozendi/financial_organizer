@@ -22,6 +22,7 @@ interface ImportationSidebarProps {
   editTransaction?: Transaction | null;
   onCreatedTransaction: (transaction: Transaction) => void;
   onEditTransaction: (editedTransaction: Transaction) => void;
+  loadTransactions: () => void;
 }
 
 const ImportationSidebar: FC<ImportationSidebarProps> = ({
@@ -30,6 +31,7 @@ const ImportationSidebar: FC<ImportationSidebarProps> = ({
   editTransaction,
   onCreatedTransaction,
   onEditTransaction,
+  loadTransactions,
 }) => {
   const navigate = useNavigate();
   const { postRequest, getRequest, patchRequest } = useApi(navigate);
@@ -208,12 +210,14 @@ const ImportationSidebar: FC<ImportationSidebarProps> = ({
           showMessage("error", "Erro ao importar arquivo. Tente novamente.");
         } else {
           showMessage("success", "Arquivo importado com sucesso!");
+          loadTransactions();
+          onClose();
         }
 
         setLoading(false);
       }
     },
-    [postRequest, showMessage]
+    [loadTransactions, onClose, postRequest, showMessage]
   );
 
   const buttonText = useMemo(() => {

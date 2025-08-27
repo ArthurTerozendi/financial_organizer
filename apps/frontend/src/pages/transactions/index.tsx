@@ -205,6 +205,7 @@ const Transactions: FC = () => {
         editTransaction={editTransaction}
         onEditTransaction={onEditTransaction}
         onCreatedTransaction={onCreatedTransaction}
+        loadTransactions={getTransactions}
       />
     </DashboardLayout>
   );
