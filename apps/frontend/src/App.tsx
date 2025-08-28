@@ -16,8 +16,6 @@ import ValueDisplay from "./components/valueDisplay";
 import TagBadge from "./components/tagBadge";
 import EmptyState from "./components/emptyState";
 import { DashboardSkeleton } from "./components/skeleton";
-import PWAInstall from "./components/pwaInstall";
-import PWAUpdate from "./components/pwaUpdate";
 
 function App() {
   const navigate = useNavigate();
@@ -210,8 +208,6 @@ function App() {
           )}
         </div>
       </DashboardLayout>
-      <PWAInstall />
-      <PWAUpdate />
     </ThemeProvider>
   );
 }
