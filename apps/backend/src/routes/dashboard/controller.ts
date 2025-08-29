@@ -25,7 +25,7 @@ export async function getCountTransactionsGroupByTag(
             acc["other"] = {
               count: 1,
               label: "Outros",
-              color: "#21A805",
+              color: "#37415180",
             };
           }
         } else if (!acc[transaction.tagId]) {

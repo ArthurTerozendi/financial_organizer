@@ -157,7 +157,7 @@ function App() {
 
   const getYearMonthChart = useCallback(() => {
     const { months, creditAmount, debitAmount } = getYearMonthChartData();
-    
+
     // Calculate responsive dimensions
     const getChartDimensions = () => {
       if (windowWidth < 500) {
@@ -174,7 +174,7 @@ function App() {
     };
 
     const { width, height } = getChartDimensions();
-    
+
     return (
       <div className="flex flex-col bg-md-gray rounded-lg p-3 sm:p-6 w-full">
         <h3 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4 text-center">
@@ -183,48 +183,71 @@ function App() {
         <div className="flex justify-center items-center w-full overflow-x-auto">
           <BarChart
             xAxis={[
-              { 
-                scaleType: "band", 
+              {
+                scaleType: "band",
                 data: months,
                 tickLabelStyle: {
-                  fontSize: windowWidth < 500 ? 10 : windowWidth < 768 ? 12 : windowWidth < 1024 ? 14 : 16,
+                  fontSize:
+                    windowWidth < 500
+                      ? 10
+                      : windowWidth < 768
+                        ? 12
+                        : windowWidth < 1024
+                          ? 14
+                          : 16,
                 },
-              }
+              },
             ]}
             yAxis={[
               {
                 tickLabelStyle: {
-                  fontSize: windowWidth < 500 ? 10 : windowWidth < 768 ? 12 : windowWidth < 1024 ? 14 : 16,
+                  fontSize:
+                    windowWidth < 500
+                      ? 10
+                      : windowWidth < 768
+                        ? 12
+                        : windowWidth < 1024
+                          ? 14
+                          : 16,
                 },
-              }
+              },
             ]}
-                          series={[
-                { 
-                  data: creditAmount, 
-                  label: "Crédito", 
-                  color: "#297c2d",
-                  valueFormatter: (value) => `R$ ${(value || 0).toLocaleString('pt-BR')}`,
-                },
-                { 
-                  data: debitAmount, 
-                  label: "Débito", 
-                  color: "#ef4444",
-                  valueFormatter: (value) => `R$ ${(value || 0).toLocaleString('pt-BR')}`,
-                },
-              ]}
+            series={[
+              {
+                data: creditAmount,
+                label: "Crédito",
+                color: "#297c2d",
+                valueFormatter: (value) =>
+                  `R$ ${(value || 0).toLocaleString("pt-BR")}`,
+              },
+              {
+                data: debitAmount,
+                label: "Débito",
+                color: "#ef4444",
+                valueFormatter: (value) =>
+                  `R$ ${(value || 0).toLocaleString("pt-BR")}`,
+              },
+            ]}
             width={width}
             height={height}
             slotProps={{
               legend: {
-                direction: windowWidth < 500 ? 'row' : 'row',
-                position: { vertical: 'top', horizontal: 'middle' },
+                direction: windowWidth < 500 ? "row" : "row",
+                position: { vertical: "top", horizontal: "middle" },
                 padding: windowWidth < 500 ? 8 : 16,
                 itemMarkWidth: windowWidth < 500 ? 12 : 16,
                 itemMarkHeight: windowWidth < 500 ? 12 : 16,
                 markGap: windowWidth < 500 ? 4 : 8,
                 itemGap: windowWidth < 500 ? 8 : 16,
                 labelStyle: {
-                  fontSize: windowWidth < 500 ? 10 : windowWidth < 768 ? 12 : windowWidth < 1024 ? 14 : 16,
+                  fontSize:
+                    windowWidth < 500
+                      ? 10
+                      : windowWidth < 768
+                        ? 12
+                        : windowWidth < 1024
+                          ? 14
+                          : 16,
                 },
               },
             }}
@@ -247,7 +270,7 @@ function App() {
         currentPage={PageEnum.Dashboard}
         title={Pages[PageEnum.Dashboard].label}
       >
-        <div className="flex w-full h-full flex-col gap-4">
+        <div className="flex w-full h-full flex-col gap-4 pt-4">
           {isLoading ? (
             <DashboardSkeleton />
           ) : transactionsGroupedByTag.length === 0 &&
@@ -283,8 +306,20 @@ function App() {
                             },
                           },
                         ]}
-                        width={windowWidth < 500 ? 250 : windowWidth < 1024 ? 300 : 350}
-                        height={windowWidth < 500 ? 250 : windowWidth < 1024 ? 300 : 350}
+                        width={
+                          windowWidth < 500
+                            ? 250
+                            : windowWidth < 1024
+                              ? 300
+                              : 350
+                        }
+                        height={
+                          windowWidth < 500
+                            ? 250
+                            : windowWidth < 1024
+                              ? 300
+                              : 350
+                        }
                         slotProps={{
                           legend: {
                             hidden: true,
@@ -350,31 +385,55 @@ function App() {
                     </div>
                   </div>
                 </div>
-                <div className="flex flex-col gap-4 bg-md-gray rounded-lg p-4 max-h-[50vh] overflow-y-auto">
-                  <h3 className="text-lg font-semibold">Transações recentes</h3>
-                  {lastFiveTransactions.map((transaction) => (
-                    <div
-                      key={transaction.id}
-                      className="flex flex-row gap-4 justify-between"
-                    >
-                      <div className="truncate w-2/4">
-                        {transaction.description}
+                <div className="flex flex-col gap-4 bg-md-gray rounded-lg p-4 overflow-y-auto">
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-lg font-semibold text-white">
+                      Transações recentes
+                    </h3>
+                    <span className="text-sm text-gray-400">
+                      {lastFiveTransactions.length} de{" "}
+                      {lastFiveTransactions.length}
+                    </span>
+                  </div>
+
+                  <div className="space-y-3">
+                    {lastFiveTransactions.map((transaction) => (
+                      <div
+                        key={transaction.id}
+                        className="group flex flex-col sm:flex-row sm:items-center gap-3 p-3 bg-gray-800/50 rounded-lg hover:bg-gray-800/70 transition-all duration-200 border border-transparent hover:border-gray-600/30"
+                      >
+                        <div className="flex-1 min-w-0">
+                          <div className="text-sm font-medium text-white truncate group-hover:text-gray-100 transition-colors">
+                            {transaction.description}
+                          </div>
+                          <div className="text-xs text-gray-400 mt-1 sm:hidden">
+                            {DateTime.fromISO(transaction.transactionDate)
+                              .setLocale("pt-BR")
+                              .toFormat("dd 'de' LLL 'às' HH:mm")}
+                          </div>
+                        </div>
+                        <div className="flex-shrink-0 w-full sm:w-auto">
+                          <TagBadge
+                            tagName={transaction.tag?.name}
+                            tagColor={transaction.tag?.color}
+                          />
+                        </div>
+
+                        <div className="flex-shrink-0 w-full sm:w-auto">
+                          <ValueDisplay
+                            value={transaction.value}
+                            type={transaction.type}
+                          />
+                        </div>
+
+                        <div className="hidden sm:block flex-shrink-0 text-sm text-gray-400 min-w-[80px] text-right">
+                          {DateTime.fromISO(transaction.transactionDate)
+                            .setLocale("pt-BR")
+                            .toFormat("dd LLL")}
+                        </div>
                       </div>
-                      <TagBadge
-                        tagName={transaction.tag?.name}
-                        tagColor={transaction.tag?.color}
-                      />
-                      <ValueDisplay
-                        value={transaction.value}
-                        type={transaction.type}
-                      />
-                      <div className="text-sm text-gray-400">
-                        {DateTime.fromISO(transaction.transactionDate)
-                          .setLocale("pt-BR")
-                          .toFormat("dd LLL")}
-                      </div>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
                 </div>
               </div>
               {getYearMonthChart()}
