@@ -164,9 +164,9 @@ const Transactions: FC = () => {
                         />
                       </TableCell>
                       <TableCell className="text-neutral-200">
-                        {DateTime.fromISO(transaction.transactionDate).toFormat(
-                          "dd LLL yyyy"
-                        )}
+                        {DateTime.fromISO(transaction.transactionDate)
+                          .setLocale("pt-BR")
+                          .toFormat("dd LLL yyyy")}
                       </TableCell>
                       <TableCell className="text-neutral-200">
                         {transaction.bankStatement?.name}

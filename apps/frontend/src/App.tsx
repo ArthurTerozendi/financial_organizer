@@ -16,6 +16,7 @@ import ValueDisplay from "./components/valueDisplay";
 import TagBadge from "./components/tagBadge";
 import EmptyState from "./components/emptyState";
 import { DashboardSkeleton } from "./components/skeleton";
+import { firstLetterToUpperCase } from "./utils";
 
 function App() {
   const navigate = useNavigate();
@@ -105,31 +106,34 @@ function App() {
     };
 
     loadDashboardData();
-  }, [getTransactionsGroupedByTag, getTransactionsGroupedByYearMonth, getLastFiveTransactions]);
+  }, [
+    getTransactionsGroupedByTag,
+    getTransactionsGroupedByYearMonth,
+    getLastFiveTransactions,
+  ]);
 
   const getYearMonthChartData = useCallback(() => {
     return transactionsGroupedByYearMonth.reduce(
       (acc, month) => {
-        const date = DateTime.fromFormat(month.yearMonth, "yyyy-LL").toFormat(
-          "LLL, yy"
-        );
+        const date = DateTime.fromFormat(month.yearMonth, "yyyy-LL")
+          .setLocale("pt-BR")
+          .toFormat("LLL, yy");
 
         acc.creditAmount.push(month.creditAmount);
         acc.debitAmount.push(month.debitAmount);
-        acc.months.push(date);
-
+        acc.months.push(firstLetterToUpperCase(date).replace(".", ""));
         return acc;
       },
       { months: [], creditAmount: [], debitAmount: [] } as {
         months: string[];
         creditAmount: number[];
-        debitAmount: number[];
-      }
+        debitAmount: number[];}
     );
   }, [transactionsGroupedByYearMonth]);
 
   const getYearMonthChart = useCallback(() => {
-    const { months, creditAmount, debitAmount } = getYearMonthChartData();
+    const { months, creditAmount, debitAmount } =
+      getYearMonthChartData();
     return (
       <div className="flex flex-grow">
         <BarChart
@@ -154,7 +158,7 @@ function App() {
           {isLoading ? (
             <DashboardSkeleton />
           ) : transactionsGroupedByTag.length === 0 &&
-          lastFiveTransactions.length === 0 ? (
+            lastFiveTransactions.length === 0 ? (
             <EmptyState
               title="Bem-vindo ao seu painel"
               description="Comece importando um extrato bancário ou criando sua primeira transação para ver insights aqui."
@@ -195,9 +199,9 @@ function App() {
                         type={transaction.type}
                       />
                       <div className="text-sm text-gray-400">
-                        {DateTime.fromISO(transaction.transactionDate).toFormat(
-                          "dd LLL"
-                        )}
+                        {DateTime.fromISO(transaction.transactionDate)
+                          .setLocale("pt-BR")
+                          .toFormat("dd LLL")}
                       </div>
                     </div>
                   ))}
