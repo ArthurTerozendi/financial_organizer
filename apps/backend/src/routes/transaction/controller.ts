@@ -128,6 +128,9 @@ export async function createTransaction(
       transactionDate: dateFormatted.toISO(),
       userId: request.user.id,
     },
+    include: {
+      tag: true,
+    },
   });
 
   reply.status(200).send({ transaction: newTransaction });
@@ -282,7 +285,7 @@ export async function updateTransaction(
       userId: request.user.id,
     },
   });
-  
+
   const updatedTransaction = await Db.instance.transaction.update({
     where: { id },
     data: {
@@ -298,4 +301,13 @@ export async function updateTransaction(
   });
 
   reply.status(200).send({ transaction: updatedTransaction });
+}
+
+export async function deleteTransaction(
+  request: FastifyRequest<{ Params: { id: string } }>,
+  reply: FastifyReply
+) {
+  const { id } = request.params;
+  await Db.instance.transaction.delete({ where: { id } });
+  reply.status(200).send({ message: "Transaction deleted" });
 }

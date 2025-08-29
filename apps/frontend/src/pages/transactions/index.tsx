@@ -69,6 +69,12 @@ const Transactions: FC = () => {
     getTransactions();
   }, [getTransactions]);
 
+  const onDeleteTransaction = useCallback((transactionId: string) => {
+    setTransactions((prevTransactions) =>
+      prevTransactions.filter((transaction) => transaction.id !== transactionId)
+    );
+  }, []);
+
   return (
     <DashboardLayout
       currentPage={PageEnum.Transactions}
@@ -206,6 +212,7 @@ const Transactions: FC = () => {
         onEditTransaction={onEditTransaction}
         onCreatedTransaction={onCreatedTransaction}
         loadTransactions={getTransactions}
+        onDeleteTransaction={onDeleteTransaction}
       />
     </DashboardLayout>
   );

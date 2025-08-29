@@ -7,6 +7,7 @@ export const ApiRoutes = {
     allTransactions: "/transaction/all",
     lastFiveTransactions: "/transaction/lastFiveTransactions",
     update: "/transaction",
+    delete: "/transaction",
   },
   dashboard: {
     tags: "/dashboard/tags",

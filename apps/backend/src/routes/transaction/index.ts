@@ -6,6 +6,7 @@ import {
   getLastFiveTransactions,
   updateTransaction,
   uploadFile,
+  deleteTransaction,
 } from "./controller";
 
 export default async function (fastify: FastifyInstance) {
@@ -50,5 +51,13 @@ export default async function (fastify: FastifyInstance) {
       preHandler: [fastify.authenticate],
     },
     updateTransaction,
+  );
+
+  fastify.delete(
+    "/:id",
+    {
+      preHandler: [fastify.authenticate],
+    },
+    deleteTransaction,
   );
 }

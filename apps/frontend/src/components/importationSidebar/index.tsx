@@ -22,6 +22,7 @@ interface ImportationSidebarProps {
   editTransaction?: Transaction | null;
   onCreatedTransaction: (transaction: Transaction) => void;
   onEditTransaction: (editedTransaction: Transaction) => void;
+  onDeleteTransaction: (transactionId: string) => void;
   loadTransactions: () => void;
 }
 
@@ -31,10 +32,11 @@ const ImportationSidebar: FC<ImportationSidebarProps> = ({
   editTransaction,
   onCreatedTransaction,
   onEditTransaction,
+  onDeleteTransaction,
   loadTransactions,
 }) => {
   const navigate = useNavigate();
-  const { postRequest, getRequest, patchRequest } = useApi(navigate);
+  const { postRequest, getRequest, patchRequest, deleteRequest } = useApi(navigate);
   const [tags, setTags] = useState<Tag[]>([]);
   const [openModal, setOpenModal] = useState(false);
   const [form, setForm] = useState<TransactionForm>({
@@ -106,7 +108,7 @@ const ImportationSidebar: FC<ImportationSidebarProps> = ({
 
   const handleCreateTransaction = useCallback(
     async (selectedTagName: string) => {
-      const response = await postRequest<TransactionForm, Transaction>(
+      const response = await postRequest<TransactionForm, {transaction: Transaction}>(
         ApiRoutes.transaction.create,
         {
           description: form.description,
@@ -122,24 +124,25 @@ const ImportationSidebar: FC<ImportationSidebarProps> = ({
       } else {
         showMessage("success", "Transação criada com sucesso!");
         clearForm();
-        onCreatedTransaction(response.data);
+        onCreatedTransaction(response.data.transaction);
+        onClose();
       }
     },
-    [clearForm, form, onCreatedTransaction, postRequest, showMessage]
+    [clearForm, form.date, form.description, form.type, form.value, onClose, onCreatedTransaction, postRequest, showMessage]
   );
 
   const handleUpdateTransaction = useCallback(
     async (selectedTagName: string) => {
-      const response = await patchRequest<TransactionForm, {transaction: Transaction}>(
-        `${ApiRoutes.transaction.update}/${editTransaction?.id}`,
-        {
-          description: form.description,
-          tag: selectedTagName,
-          value: form.value,
-          date: form.date,
-          type: form.type,
-        }
-      );
+      const response = await patchRequest<
+        TransactionForm,
+        { transaction: Transaction }
+      >(`${ApiRoutes.transaction.update}/${editTransaction?.id}`, {
+        description: form.description,
+        tag: selectedTagName,
+        value: form.value,
+        date: form.date,
+        type: form.type,
+      });
 
       if (response.type === "error" || !response.data) {
         showMessage("error", "Erro ao atualizar transação. Tente novamente.");
@@ -160,6 +163,20 @@ const ImportationSidebar: FC<ImportationSidebarProps> = ({
       onClose,
     ]
   );
+
+  const handleDeleteTransaction = useCallback(async () => {
+    if (!editTransaction?.id) return;
+    const response = await deleteRequest<Record<string, never>, { message: string }>(
+      `${ApiRoutes.transaction.delete}/${editTransaction?.id}`
+    );
+    if (response.type === "error" || !response.data) {
+      showMessage("error", "Erro ao deletar transação. Tente novamente.");
+    } else {
+      showMessage("success", "Transação deletada com sucesso!");
+      onDeleteTransaction(editTransaction.id);
+      onClose();
+    }
+  }, [deleteRequest, editTransaction?.id, onClose, onDeleteTransaction, showMessage]);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleFormSubmit = useCallback(
@@ -239,7 +256,7 @@ const ImportationSidebar: FC<ImportationSidebarProps> = ({
 
       {/* Sidebar */}
       <div
-        className={`fixed top-0 right-0 h-full w-96 bg-[#2F3B51] z-50 transform transition-transform duration-300 ease-in-out ${
+        className={`fixed top-0 right-0 h-full w-full sm:w-96 bg-[#2F3B51] z-50 transform transition-transform duration-300 ease-in-out ${
           isOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
@@ -339,7 +356,7 @@ const ImportationSidebar: FC<ImportationSidebarProps> = ({
                 onChange={(e) => handleFormChange(e.target.value, "date")}
                 type="datetime-local"
               />
-              <div className="flex justify-end items-start">
+              <div className="flex justify-end items-start gap-2">
                 <button
                   className={`py-2 px-4 text-white rounded font-semibold text-sm ${
                     loading
@@ -351,31 +368,46 @@ const ImportationSidebar: FC<ImportationSidebarProps> = ({
                 >
                   {buttonText}
                 </button>
+
+                {editTransaction && (
+                  <button
+                    className={`py-2 px-4 text-white rounded font-semibold text-sm ${
+                      loading
+                        ? "bg-gray-400 cursor-not-allowed"
+                        : "bg-red-900 hover:bg-red-700"
+                    }`}
+                    onClick={() => handleDeleteTransaction()}
+                    disabled={loading}
+                  >
+                    Excluir
+                  </button>
+                )}
               </div>
             </form>
-
-            <div className="mt-8 pt-6 border-t border-neutral-600">
-              <label
-                htmlFor="uploadFile"
-                className={`block w-full py-2 px-4 text-white rounded font-semibold text-sm cursor-pointer text-center ${
-                  loading
-                    ? "bg-gray-400 cursor-not-allowed"
-                    : "bg-purple hover:bg-purple/90"
-                }`}
-                title="Importar arquivo OFX"
-              >
-                {loading ? "Importando..." : "Importar Extrato (OFX)"}
-              </label>
-              <input
-                id="uploadFile"
-                name="bankStatement"
-                type="file"
-                onChange={handleUploadSubmit}
-                hidden={true}
-                accept=".ofx"
-                disabled={loading}
-              />
-            </div>
+            {!editTransaction && (
+              <div className="mt-8 pt-6 border-t border-neutral-600">
+                <label
+                  htmlFor="uploadFile"
+                  className={`block w-full py-2 px-4 text-white rounded font-semibold text-sm cursor-pointer text-center ${
+                    loading
+                      ? "bg-gray-400 cursor-not-allowed"
+                      : "bg-purple hover:bg-purple/90"
+                  }`}
+                  title="Importar arquivo OFX"
+                >
+                  {loading ? "Importando..." : "Importar Extrato (OFX)"}
+                </label>
+                <input
+                  id="uploadFile"
+                  name="bankStatement"
+                  type="file"
+                  onChange={handleUploadSubmit}
+                  hidden={true}
+                  accept=".ofx"
+                  disabled={loading}
+                />
+              </div>
+            )}
           </div>
         </div>
       </div>
