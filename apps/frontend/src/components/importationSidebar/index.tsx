@@ -36,7 +36,8 @@ const ImportationSidebar: FC<ImportationSidebarProps> = ({
   loadTransactions,
 }) => {
   const navigate = useNavigate();
-  const { postRequest, getRequest, patchRequest, deleteRequest } = useApi(navigate);
+  const { postRequest, getRequest, patchRequest, deleteRequest } =
+    useApi(navigate);
   const [tags, setTags] = useState<Tag[]>([]);
   const [openModal, setOpenModal] = useState(false);
   const [form, setForm] = useState<TransactionForm>({
@@ -95,6 +96,11 @@ const ImportationSidebar: FC<ImportationSidebarProps> = ({
     [setMessage]
   );
 
+  const handleClose = useCallback(() => {
+    clearForm();
+    onClose();
+  }, [clearForm, onClose]);
+
   const getTags = useCallback(async () => {
     const response = await getRequest<Record<string, never>, { tags: Tag[] }>(
       ApiRoutes.tag
@@ -108,27 +114,35 @@ const ImportationSidebar: FC<ImportationSidebarProps> = ({
 
   const handleCreateTransaction = useCallback(
     async (selectedTagName: string) => {
-      const response = await postRequest<TransactionForm, {transaction: Transaction}>(
-        ApiRoutes.transaction.create,
-        {
-          description: form.description,
-          tag: selectedTagName,
-          value: form.value,
-          date: form.date,
-          type: form.type,
-        }
-      );
+      const response = await postRequest<
+        TransactionForm,
+        { transaction: Transaction }
+      >(ApiRoutes.transaction.create, {
+        description: form.description,
+        tag: selectedTagName,
+        value: form.value,
+        date: form.date,
+        type: form.type,
+      });
 
       if (response.type === "error" || !response.data) {
         showMessage("error", "Erro ao criar transação. Tente novamente.");
       } else {
         showMessage("success", "Transação criada com sucesso!");
-        clearForm();
         onCreatedTransaction(response.data.transaction);
-        onClose();
+        handleClose();
       }
     },
-    [clearForm, form.date, form.description, form.type, form.value, onClose, onCreatedTransaction, postRequest, showMessage]
+    [
+      form.date,
+      form.description,
+      form.type,
+      form.value,
+      handleClose,
+      onCreatedTransaction,
+      postRequest,
+      showMessage,
+    ]
   );
 
   const handleUpdateTransaction = useCallback(
@@ -148,35 +162,44 @@ const ImportationSidebar: FC<ImportationSidebarProps> = ({
         showMessage("error", "Erro ao atualizar transação. Tente novamente.");
       } else {
         showMessage("success", "Transação atualizada com sucesso!");
-        clearForm();
         onEditTransaction(response.data.transaction);
-        onClose();
+        handleClose();
       }
     },
     [
-      clearForm,
-      editTransaction?.id,
-      form,
-      onEditTransaction,
       patchRequest,
+      editTransaction?.id,
+      form.description,
+      form.value,
+      form.date,
+      form.type,
       showMessage,
-      onClose,
+      onEditTransaction,
+      handleClose,
     ]
   );
 
-  const handleDeleteTransaction = useCallback(async () => {
+  const handleDeleteTransaction = useCallback(async (e: { preventDefault: () => void }) => {
+    e.preventDefault();
     if (!editTransaction?.id) return;
-    const response = await deleteRequest<Record<string, never>, { message: string }>(
-      `${ApiRoutes.transaction.delete}/${editTransaction?.id}`
-    );
+    const response = await deleteRequest<
+      Record<string, never>,
+      { message: string }
+    >(`${ApiRoutes.transaction.delete}/${editTransaction?.id}`);
     if (response.type === "error" || !response.data) {
       showMessage("error", "Erro ao deletar transação. Tente novamente.");
     } else {
       showMessage("success", "Transação deletada com sucesso!");
       onDeleteTransaction(editTransaction.id);
-      onClose();
+      handleClose();
     }
-  }, [deleteRequest, editTransaction?.id, onClose, onDeleteTransaction, showMessage]);
+  }, [
+    deleteRequest,
+    editTransaction?.id,
+    handleClose,
+    onDeleteTransaction,
+    showMessage,
+  ]);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleFormSubmit = useCallback(
@@ -376,7 +399,7 @@ const ImportationSidebar: FC<ImportationSidebarProps> = ({
                         ? "bg-gray-400 cursor-not-allowed"
                         : "bg-red-900 hover:bg-red-700"
                     }`}
-                    onClick={() => handleDeleteTransaction()}
+                    onClick={handleDeleteTransaction}
                     disabled={loading}
                   >
                     Excluir
