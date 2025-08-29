@@ -105,6 +105,7 @@ export async function createTransaction(
   let dbTag = await Db.instance.tag.findFirst({
     where: {
       name: tag,
+      userId: request.user.id,
     },
   });
 
@@ -275,8 +276,13 @@ export async function updateTransaction(
   if (!transaction)
     return reply.status(404).send({ message: "Transaction not found" });
 
-  const formattedTag = tag === "" || tag === null || tag === undefined ? null : tag;
-
+  let dbTag = await Db.instance.tag.findFirst({
+    where: {
+      name: tag,
+      userId: request.user.id,
+    },
+  });
+  
   const updatedTransaction = await Db.instance.transaction.update({
     where: { id },
     data: {
@@ -284,7 +290,7 @@ export async function updateTransaction(
       type: type as "Credit" | "Debit",
       value,
       transactionDate: dateFormatted.toISO(),
-      tagId: formattedTag,
+      tagId: dbTag?.id,
     },
     include: {
       tag: true,

@@ -44,7 +44,7 @@ const Transactions: FC = () => {
     } finally {
       setIsLoading(false);
     }
-  }, [getRequest, setTransactions]);
+  }, [getRequest]);
 
   const handleEditTransaction = useCallback((transaction: Transaction) => {
     setEditTransaction(transaction);

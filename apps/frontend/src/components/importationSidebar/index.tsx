@@ -130,7 +130,7 @@ const ImportationSidebar: FC<ImportationSidebarProps> = ({
 
   const handleUpdateTransaction = useCallback(
     async (selectedTagName: string) => {
-      const response = await patchRequest<TransactionForm, Transaction>(
+      const response = await patchRequest<TransactionForm, {transaction: Transaction}>(
         `${ApiRoutes.transaction.update}/${editTransaction?.id}`,
         {
           description: form.description,
@@ -146,7 +146,7 @@ const ImportationSidebar: FC<ImportationSidebarProps> = ({
       } else {
         showMessage("success", "Transação atualizada com sucesso!");
         clearForm();
-        onEditTransaction(response.data);
+        onEditTransaction(response.data.transaction);
         onClose();
       }
     },
