@@ -80,6 +80,9 @@ export async function getAllTransactions(
         bankStatement: true,
         tag: true,
       },
+      orderBy: {
+        transactionDate: "desc",
+      },
     });
 
     reply.status(200).send({ transactions });
@@ -198,9 +201,11 @@ export async function uploadFile(request: FastifyRequest, reply: FastifyReply) {
       const transactionValue = Number(transaction.TRNAMT);
       const parsedDate = parseDate(transaction.DTPOSTED as any);
 
-      const transactionDate = parsedDate
-        ? parsedDate.toISOString()
-        : new Date().toISOString();
+      if (!parsedDate) {
+        return;
+      }
+
+      const transactionDate = parsedDate.toISOString();
 
       return {
         description: transaction.MEMO || "No description",
@@ -215,7 +220,7 @@ export async function uploadFile(request: FastifyRequest, reply: FastifyReply) {
 
     if (transactions.length > 0) {
       await Db.instance.transaction.createMany({
-        data: transactions,
+        data: transactions.filter((transaction) => transaction !== undefined),
       });
     }
 
